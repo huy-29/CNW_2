@@ -1,0 +1,266 @@
+﻿
+.txbTimKiem{
+	margin: auto auto 20px auto;
+}
+
+.txbTimKiem input[type=text]{
+	margin-left: 250px;
+	border: 2px solid #F7941E;
+	border-radius: 3px;
+	width: 600px;
+	height: 40px;
+	font-size: 1.1em;
+}
+
+.txbTimKiem input[type=text]:after{
+	border: 2px solid #F7941E;
+}
+
+.txbTimKiem a{
+	background-color: #a23e3e;
+	border-radius: 4px;
+	padding: 12px 16px;
+	color: white;
+}
+
+.txbTimKiem a:hover{
+	cursor: pointer;
+	background-color: #ed7676;
+}
+
+.DanhMucTimKiem {
+}
+
+.DanhMucTimKiem h2 {
+    color: #FE980F;
+	background-color: #ffeeee;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	margin: 0px auto 10px;
+	padding: 10px 0 5px 0;
+	border-radius: 7px 7px 0 0;
+	text-align: center;
+	text-transform: uppercase;
+	/*position: relative;*/
+	/*z-index: 3;*/
+}
+
+.DanhMucTimKiem .frmKhoangGia, .frmRadio{
+	border: 1px solid #efeaea;
+	border-radius: 7px;
+	margin-bottom: 20px;
+
+}
+
+.DanhMucTimKiem .frmKhoangGia{
+	height: 120px;
+}
+
+.frmKhoangGia input[type = text] {
+	font-family: 'Roboto', sans-serif;
+	display: inline-block;
+	width: 37%;
+	margin: 0 5% 20px 5%;
+	text-align: center;
+	border-color: none;
+}
+
+.frmKhoangGia a {
+	padding: 5px 20px;
+	border-radius: 3px;
+	background-color: #ed941c;
+	margin-left: 80px;
+	color: white;
+}
+
+.frmKhoangGia a:hover{
+	cursor: pointer;
+	background-color: #ebc48e;
+}
+
+.DanhMucTimKiem .frmRadio{
+	
+}
+
+.frmRadio label {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 100;
+	font-size: 15px;
+	transition: all .3s;
+}
+
+.frmRadio label:hover, input[type = radio]:hover {
+	color: #ff970c;
+	cursor: pointer;
+}
+
+.frmRadio input[type = radio] {
+	
+}
+
+.frmRadio ul {
+	margin: auto auto 20px auto;
+}
+
+.frmRadio li {
+	padding-left: 35px;
+}
+
+.frmRadio li:hover {
+	
+}
+
+.frmRadio .RadioActive {
+	color: #ff970c;
+}
+
+/*----------------------------------------------------------------------------------------*/
+/*---------------------------------FORM THÊM VÀO GIỎ--------------------------------------*/
+/*----------------------------------------------------------------------------------------*/
+
+.blank_background{
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-color: #808080;
+	opacity: 40%;
+}
+
+.frmThemVaoGio {
+	display: none;
+	position: fixed;
+	top: calc(50vh - 150px);
+	left: calc(50vw - 225px);
+	width: 450px;
+	height: 300px;
+	/*margin: auto auto auto auto;*/
+	/*border: 1px solid #808080;*/
+	background-color: white;
+	border-radius: 3px;
+}
+
+.frmThemVaoGio .row{
+	margin: auto auto auto auto;
+}
+
+.frmThemVaoGio .TieuDeGioHang{
+	display: flex;
+	background-color: #1a5cbe;
+	border-radius: 3px 3px 0 0;
+}
+
+.frmThemVaoGio .TieuDeGioHang .TieuDe{
+	color: white;
+	padding: 3px 0 3px 6px;
+}
+
+.frmThemVaoGio .TieuDeGioHang .btnThoatGioHang{
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-weight: 700;
+	color: white;
+	background-color: #b9b0b0;
+	padding: 3px 10px;
+	transition: background-color .5s;
+}
+
+.frmThemVaoGio .TieuDeGioHang .btnThoatGioHang:hover{
+	cursor: pointer;
+	background-color: #f60c0c;
+}
+
+.frmThemVaoGio img{
+	width: 80px;
+	height: 80px;
+	margin: 10px auto 10px auto;
+	border: 3px solid red;
+}
+
+.frmThemVaoGio .ChiTiet .col-sm-9{
+	padding-top: 20px;
+}
+
+.frmThemVaoGio .ChiTiet .col-sm-9 .TenSP{
+	line-height: 15px;
+	height: 30px;
+	margin-bottom: 10px;
+	font-family: 'Roboto', sans-serif;
+	/*font-size: 15px;*/
+	opacity: 75%;
+}
+
+.frmThemVaoGio .ChiTiet .col-sm-9 p{
+	line-height: 9px;
+}
+
+.frmThemVaoGio hr{
+	margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+.frmThemVaoGio .LuaChonSoLuong{
+	padding: 10px 0 10px 0;
+	display: flex;
+}
+
+.frmThemVaoGio .LuaChonSoLuong .SoLuong{
+	position: absolute;
+	right: 0;
+	margin-right: 30px;
+}
+
+.frmThemVaoGio .LuaChonSoLuong .SoLuong input[type=number]{
+	width: 50px;
+	text-align: center;
+}
+
+.frmThemVaoGio .LuaChonSoLuong .SoLuong input[type = number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+.frmThemVaoGio .TongTienSP .TongTien{
+	position: absolute;
+	right: 0;
+	margin-right: 30px;
+}
+
+.frmThemVaoGio .TongTienSP .TongTien p{
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.frmThemVaoGio .btnThemVaoGioHang{
+	margin-left: 80px;
+	margin-top: 20px;
+}
+
+.frmThemVaoGio .btnThemVaoGioHang a{
+	background-color: #fa2a2a;
+	padding: 8px 80px;
+	border-radius: 3px;
+	color: white;
+}
+
+.frmThemVaoGio .btnThemVaoGioHang a:hover{
+	cursor: pointer;
+	background-color: #f17171;
+}
+
+
+
+
+
+
+
+
+
+
+
+

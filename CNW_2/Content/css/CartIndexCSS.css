@@ -1,0 +1,101 @@
+﻿.cart_container {
+    /*border: 1px solid red;*/
+    width: 80%;
+    margin-left: 10%;
+    /*margin-bottom: 5px;*/
+}
+
+#cart_items td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+#cart_items td input[type=checkbox]:hover{
+    cursor: pointer;
+}
+
+#cart_items tr td:last-child{
+    /*vertical-align: middle;*/
+}
+
+#cart_items td img {
+    width: 80px;
+    height: 80px;
+}
+
+#cart_items img:hover{
+    cursor: pointer;
+}
+
+#cart_items .SoLuong input[type=number] {
+    width: 70px;
+    text-align: center;
+}
+
+#cart_items .SoLuong input[type = number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+#cart_items .btnXoa {
+    background-color: #e5dada;
+    color: red;
+    padding: 4px 5px;
+}
+
+#cart_items .btnXoa:hover{
+    background-color: #FE980F;
+    cursor: pointer;
+}
+
+/*----------------------------------------MUA HÀNG BOTTOM CONTENT----------------------*/
+.panelMuaHang {
+    position: fixed;
+    bottom: 0;
+    width: 80%;
+    height: 70px;
+    background-color: #f9e7cf;
+    margin-left: 10%;
+}
+
+.panelMuaHang .btnMuaHang {
+    position: absolute;
+    right: 0;
+    padding: 15px 50px;
+    margin: 10px 40px auto auto;
+    border-radius: 2px;
+    background: #ee4d2d;
+    font-size: 16px;
+    color: white;
+}
+
+.panelMuaHang .btnMuaHang:hover {
+    background: #e67963;
+    cursor: pointer;
+}
+
+.panelMuaHang .contentMuaHang{
+    /*border: 1px solid red;*/
+    width: 400px;
+    height: 30px;
+    margin-top: 22px;
+    margin-left: 590px;
+}
+
+.panelMuaHang .contentMuaHang .label_TongTien{
+    font-size: 19px;
+    float: right;
+    margin: 3px 4px auto auto;
+}
+
+.panelMuaHang .contentMuaHang #pnl_TongTien{
+    font-size: 25px;
+    float: right;
+    color: #ee4d2d;
+}
+
+
+
+
+
+
+

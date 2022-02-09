@@ -1,0 +1,294 @@
+﻿body {
+}
+
+/*---------------------------------------------------------------------------------*/
+/*------------------------------------BUTTON BACK----------------------------------*/
+/*---------------------------------------------------------------------------------*/
+.frmBack{
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.btnBack {
+    background-color: #FE980F;
+    color: white;
+    width: 40px;
+    height: 40px;
+    padding: 11px;
+    border-radius: 50%;
+}
+
+.btnBack:hover{
+    background-color: #f4c383;
+}
+
+
+/*---------------------------------------------------------------------------------*/
+/*--------------------------------BUTTON RESET FORM--------------------------------*/
+/*---------------------------------------------------------------------------------*/
+.ResetForm{
+    margin-bottom: 10px;
+}
+
+    .ResetForm a {
+        background-color: #d0b937;
+        color: white;
+        margin-left: 990px;
+        padding: 5px 15px;
+        border-radius: 3px;
+    }
+
+        .ResetForm a:hover {
+            background-color: #eee196;
+            color: #bcbcbc;
+            cursor: pointer;
+        }
+
+
+/*---------------------------------------------------------------------------------*/
+/*-----------------------------FROM ĐIỀN THÔNG TIN---------------------------------*/
+/*---------------------------------------------------------------------------------*/
+/*.frmDienThongTin {
+    line-height: ;
+}*/
+.frmDienThongTin br {
+    display: block; /* makes it have a width */
+    content: ""; /* clears default height */
+    margin-top: 10px; /* change this to whatever height you want it */
+}
+
+.frmDienThongTin .Add_heading {
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 17px;
+    width: 80px;
+}
+
+.frmDienThongTin .row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.frmDienThongTin .row .Add_headingrow {
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 5px;
+    font-size: 17px;
+}
+
+.frmDienThongTin .row .Add_headingrow_GiaBan {
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 17px;
+    width: 80px;
+}
+
+.frmDienThongTin #TenSach {
+    padding: 2px;
+    width: 950px;
+}
+
+.frmDienThongTin #GiaBan {
+    padding: 2px;
+    width: 100px;
+}
+
+.frmDienThongTin #SoLuong {
+    padding: 2px;
+    width: 70px;
+}
+
+.frmDienThongTin #NXB {
+    padding: 2px;
+    width: 250px;
+}
+
+.frmDienThongTin #TacGia, #TheLoai {
+    padding: 2px;
+    width: 250px;
+}
+
+.btnThem_TacGia_TheLoai {
+    background-color: #aeaeae;
+    color: white;
+    padding: 5px 10px;
+    font-size: 18px;
+}
+
+    .btnThem_TacGia_TheLoai:hover {
+        background-color: #cecece;
+        color: white;
+        cursor: pointer;
+    }
+
+.frmDienThongTin #listTacGia, #listTheLoai {
+    padding: 2px;
+    margin-left: 100px;
+    width: 500px;
+}
+
+.frmDienThongTin #MoTa{
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 2px;
+    width: 950px;
+    height: 100px;
+    color: black;
+}
+
+.frmDienThongTin .Add_heading_AnhBia {
+    /*display: inline-block;*/
+    /*margin-left: 20px;*/
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-top: 25px;
+
+}
+
+.frmDienThongTin #AnhBia {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+    .frmDienThongTin #AnhBia + label {
+        font-size: 15px;
+        font-weight: 100;
+        color: #5e5959;
+        background-color: #beb9b9;
+        /*display: inline-block;*/
+        cursor: pointer;
+        width: fit-content;
+        padding: 5px 10px;
+        border-radius: 3px;
+    }
+
+        .frmDienThongTin #AnhBia + label:hover {
+            background-color: #dfdada;
+        }
+
+.frmDienThongTin .XoaAnhBia {
+    font-size: 15px;
+    font-weight: 100;
+    color: #5e5959;
+    background-color: #beb9b9;
+    /*display: inline-block;*/
+    cursor: pointer;
+    width: fit-content;
+    padding: 5px 10px;
+    border-radius: 3px;
+
+    margin-left: 10px;
+}
+
+    .frmDienThongTin .XoaAnhBia:hover {
+        background-color: #dfdada;
+    }
+
+.frmDienThongTin .UploadPicture #output_AnhBia {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 30px;
+}
+
+.frmDienThongTin .div_btnThemMoi {
+    /*margin-top: 20px;*/
+}
+
+    .frmDienThongTin .div_btnThemMoi .btnThemVaoBang {
+        background-color: #4f5b9c;
+        color: white;
+        padding: 8px;
+        border-radius: 3px;
+        /*margin-left: 20px;*/
+    }
+
+        .frmDienThongTin .div_btnThemMoi .btnThemVaoBang:hover {
+            background-color: #808fdd;
+            cursor: pointer;
+        }
+
+
+/*---------------------------------------------------------------------------------*/
+/*-----------------------------TABLE DANH SÁCH BOOK------------------------------------*/
+/*---------------------------------------------------------------------------------*/
+#post_AnhBia {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+#img_post {
+    width: 100px;
+    height: 100px;
+}
+
+.btnDelete{
+    background-color: #cb3333;
+    color: aliceblue;
+    border: none;
+    border-radius: 2px;
+}
+
+    .btnDelete:hover {
+        background-color: #f06a6a;
+    }
+
+
+/*---------------------------------------------------------------------------------*/
+/*--------------------------------BUTTON SUBMIT------------------------------------*/
+/*---------------------------------------------------------------------------------*/
+.btnSubmit {
+    background-color: #267530;
+    color: aliceblue;
+    padding: 8px;
+    border-radius: 2px;
+}
+
+    .btnSubmit:hover {
+        background-color: #1fc734;
+        color: aliceblue;
+        cursor: pointer;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,304 @@
+﻿@model List<CNW_2.Models.DTO.GioHang>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<head>
+    <link href="~/Content/css/CartIndexCSS.css" rel="stylesheet" />
+</head>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p class="text-info text-center">
+        Giỏ hàng của bạn rỗng!
+    </p>
+}
+else
+{
+    <section id="cart_items">
+        <div class="cart_container">
+            <div class="table-responsive cart_info" style="margin-top: 10px;">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr class="cart_menu">
+                            <td class=" " style="width: 20px;"><input id="chk_All" type="checkbox" onclick="CheckBoxAll()" /></td>
+                            <td class=" " style="width: 90px;">Ảnh bìa</td>
+                            <td class=" " style="width: 400px;">Tên sách</td>
+                            <td class=" " style="width: 120px;">Giá bán</td>
+                            <td class=" " style="width: 100px;">Số lượng</td>
+                            <td class=" " style="width: 120px;">Tổng tiền</td>
+                            <td class=" " style="width: 30px;"></td>
+                        </tr>
+                    </thead>
+                    <tbody id="cart_content">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="cart_CheckBox"><input id="chk_Cell" type="checkbox" onclick="row_Click(this)" /></td>
+                                <td class="cart_AnhBia">
+                                    <img src="~/Content/images/Sach_image/@item.AnhBia" alt="Ảnh bìa" />
+                                </td>
+                                <td class="cart-TenSach">
+                                    @item.TenSach
+                                </td>
+                                <td class="cart_GiaBan">
+                                    @item.GiaBan
+                                </td>
+                                <td class="cart_SoLuong">
+                                    <div class="SoLuong">
+                                        <input type="hidden" id="cart_MaSach" value="@item.MaSach" />
+                                        <input type="hidden" id="Max" value="@item.SoLuongTon" />
+                                        <input id="cart_minus" type="button" value="-" onclick="TangGiamSoLuong_Cart(this)">
+                                        <input type="number" value="@item.SoLuong" max="" min="0" id="cart_number" onkeydown="return ThanhTien_keyDown(event);" onkeyup="ThanhTien_keyUp(this)" onchange="ThanhTien_onChange(this)">
+                                        <input id="cart_plus" type="button" value="+" onclick="TangGiamSoLuong_Cart(this)">
+                                    </div>
+                                </td>
+                                <td class="cart_ThanhTien">
+                                    @item.ThanhTien
+                                </td>
+                                <td class="">
+                                    <a class="btnXoa" onclick="DeleteCart(@item.MaSach, this)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-5"></div>
+                <div class="col-sm-12 col-md-7">
+                    <div class="pagination" id="dataTable_paginate" style="text-align:right">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panelMuaHang">
+            <a class="btnMuaHang">Mua hàng</a>
+            <div class="contentMuaHang">
+                <p id="pnl_TongTien">0</p>
+                <p class="label_TongTien">Tổng thanh toán: </p>
+            </div>
+
+        </div>
+
+        <div class="hiddenInput">
+            @{
+                string heightScroll = "0";
+                if (Session["CartIndex_ScrollTop"] != null)
+                {
+                    heightScroll = Session["CartIndex_ScrollTop"].ToString();
+                }
+            }
+            <input type="hidden" id="pageTop" value="@heightScroll" />
+        </div>
+    </section>
+}
+
+
+<script>
+    (function () {
+        //window.scrollTo(0, 50); // values are x,y-offset
+        document.documentElement.scrollTop = document.getElementById("pageTop").value;
+    })()
+
+    function SetSession(setName, setValue) {
+        var obj = JSON.stringify({
+            name: setName,
+            value: setValue
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/Cart/SetSession",
+            data: obj,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+        });
+    }
+
+    //----------------------JS SỬA GIỎ HÀNG----------------------------
+    function UpdateCart(input) {
+        //Update
+        var cart_MaSach = Number($(input).parent().find("#cart_MaSach").val());
+        var cart_SoLuong = Number($(input).parent().find("#cart_number").val());
+
+        if (cart_SoLuong != 0) {
+            var obj = JSON.stringify({
+                MaSach: cart_MaSach,
+                SoLuong: cart_SoLuong
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Cart/CapNhatGioHang",
+                data: obj,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+            });
+
+            //Update Thanh Toán
+            Update_ThanhToan();
+        }
+    }
+
+    function DeleteCart(cart_MaSach, cell) {
+        var result = confirm("Xóa sản phẩm khỏi giỏ hàng?");
+
+        if (result) {
+            var obj = JSON.stringify({
+                MaSach: cart_MaSach,
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Cart/XoaGioHang",
+                data: obj,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+            }).done(function (response) {
+                if (response == true) {
+                    var numberCartItems = document.getElementById("number_cartItems");
+                    numberCartItems.innerHTML = Number(numberCartItems.innerHTML) - 1;
+                    //debugger;
+                    $(cell).closest("tr").remove();
+
+                    //Update Thanh Toán
+                    Update_ThanhToan();
+                }
+            })
+        }
+    }
+
+    function ThanhTien_keyDown(event) {
+        var key;
+        if (window.event) {
+            key = window.event.key;
+            //debugger;
+        }
+        if (key == "." || key == "-" || key == "+") {
+            return false;
+        }
+        if (RegExp(/^[0-9]+$/).test(key) == true) {
+            true;
+        }
+    }
+
+    function ThanhTien_keyUp(input) {
+        if ($(input).val() != '') {
+            var GiaBan = Number($(input).parent().parent().parent().find(".cart_GiaBan").text());
+            var SoLuong = Number($(input).val());
+
+            if (SoLuong == 0) {
+                DeleteCart(Number($(input).parent().find("#cart_MaSach").val()), input);
+            }
+            else {
+                var maxValue = Number($(input).parent().find("#Max").val());
+
+                if (SoLuong > maxValue) {
+                    $(input).val(maxValue);
+                }
+                $(input).parent().parent().parent().find(".cart_ThanhTien").text(GiaBan * SoLuong);
+                UpdateCart(input);
+            }
+        }
+        //debugger;
+    }
+
+    function ThanhTien_onChange(input) {
+        if ($(input).val() == "") {
+            $(input).val(1);
+        }
+        var GiaBan = Number($(input).parent().parent().parent().find(".cart_GiaBan").text());
+        var SoLuong = Number($(input).val());
+
+        $(input).parent().parent().parent().find(".cart_ThanhTien").text(GiaBan * SoLuong);
+        UpdateCart(input);
+    }
+
+    function TangGiamSoLuong_Cart(btn) {
+        var numberValue = Number($(btn).parent().find("#cart_number").val());
+        var maxValue = Number($(btn).parent().find("#Max").val());
+
+        //debugger;
+        if (btn.value == '+') {
+            if (numberValue < maxValue) {
+                numberValue++;
+                $(btn).parent().find("#cart_number").val(numberValue);
+
+            }
+        }
+        else if (btn.value == '-') {
+            if (numberValue > 1) {
+                numberValue--;
+                $(btn).parent().find("#cart_number").val(numberValue);
+
+            }
+            else if (numberValue == 1) {
+                DeleteCart(Number($(btn).parent().find("#cart_MaSach").val()), btn);
+            }
+        }
+
+        var GiaBan = Number($(btn).parent().parent().parent().find(".cart_GiaBan").text());
+
+        $(btn).parent().parent().parent().find(".cart_ThanhTien").text(GiaBan * numberValue);
+        UpdateCart(btn);
+    }
+
+    //------------------------------JS CHECKBOX THANH TOÁN -----------------------------
+
+    function CheckBoxAll() {
+        var table = document.getElementById("cart_content");
+        var table_row = table.getElementsByTagName("tr");
+
+        if (document.getElementById("chk_All").checked == true) {
+            var cart_value = 0;
+            for (var i = 0; i < table_row.length; ++i) {
+                $(table_row[i]).find("#chk_Cell").prop('checked', true);
+                cart_value = cart_value + Number($(table_row[i]).find(".cart_ThanhTien").text());
+                document.getElementById("pnl_TongTien").innerHTML = cart_value;
+            }
+        }
+        else {
+            for (var i = 0; i < table_row.length; ++i) {
+                //if ($(table_row[i]).find("input").is(':checked') == true) {
+                //    document.getElementById("postTheLoai").value = $(table_row[i]).find("label").text();
+                //}
+                $(table_row[i]).find("#chk_Cell").prop('checked', false);
+                document.getElementById("pnl_TongTien").innerHTML = 0;
+            }
+        }
+    }
+
+    function row_Click(row) {
+        //debugger;
+        var ThanhToan = Number(document.getElementById("pnl_TongTien").innerHTML);
+        var TongTien = Number($(row).parent().parent().find(".cart_ThanhTien").text());
+
+        if ($(row).is(':checked') == false) {
+            $("#chk_All").prop('checked', false);
+
+            document.getElementById("pnl_TongTien").innerHTML = ThanhToan - TongTien;
+        }
+        else {
+            document.getElementById("pnl_TongTien").innerHTML = ThanhToan + TongTien;
+        }
+    }
+
+    function Update_ThanhToan() {
+        var table = document.getElementById("cart_content");
+        var table_row = table.getElementsByTagName("tr");
+
+        var cart_value = 0;
+        for (var i = 0; i < table_row.length; ++i) {
+            if ($(table_row[i]).find("#chk_Cell").is(':checked') == true) {
+                cart_value = cart_value + Number($(table_row[i]).find(".cart_ThanhTien").text());
+            }
+        }
+
+        document.getElementById("pnl_TongTien").innerHTML = cart_value;
+    }
+</script>
+

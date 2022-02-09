@@ -1,0 +1,210 @@
+﻿@model PagedList.IPagedList<CNW_2.Models.DTO.Sach_AdminIndex>
+@using CNW_2.Models.DTO
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<head>
+    <link href="~/Content/css/AdminIndexCSS.css" rel="stylesheet" />
+</head>
+
+
+
+<section id="cart_items">
+    <div class="container">
+        <div class="sectionTimKiem">
+            <form id="frmSearch" class='frmSearch' action="/Admin/Search" method="post" enctype="multipart/form-data" name="frmSearch">
+                <div class="frmDienThongTin">
+                    <div class="row Search_up">
+                        <div class="col-sm-5">
+                            @{
+                                string TimTenSach = "";
+                                if (Session["TimTenSach"] != null) { TimTenSach = Session["TimTenSach"].ToString(); }
+                            }
+                            <p class="heading heading_TenSach">Tên sách</p>
+                            <input type="text" placeholder="" autocomplete="off" id="TenSach" name="TenSach" value="@TimTenSach" />
+                        </div>
+                        <div class="col-sm-6">
+                            @{
+                                string Min = "";
+                                string Max = "";
+                                if (Session["TimGiaTienMin"] != null) { Min = Session["TimGiaTienMin"].ToString(); }
+                                if (Session["TimGiaTienMax"] != null) { Max = Session["TimGiaTienMax"].ToString(); }
+                            }
+                            <p class="heading">Khoảng giá</p>
+                            <input type="text" placeholder="" autocomplete="off" id="KhoangGia" name="Min" value="@Min" />
+                            -
+                            <input type="text" placeholder="" autocomplete="off" id="KhoangGia" name="Max" value="@Max" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            @{
+                                string TimNXB = "";
+                                if (Session["TimNXB"] != null) { TimNXB = Session["TimNXB"].ToString(); }
+                            }
+                            <p class="heading">Nhà xuất bản</p>
+                            <input type="text" list="datalistNXB" placeholder="" autocomplete="off" id="NXB" name="NXB" value="@TimNXB" />
+                            <datalist id="datalistNXB">
+                                @foreach (var item in ViewBag.listNXB as ICollection<NhaXuatBan>)
+                                {
+                                    <option value="@item.TenNXB"></option>
+                                }
+                            </datalist>
+                        </div>
+                        <div class="col-sm-4">
+                            @{
+                                string TimTheLoai = "";
+                                if (Session["TimTheLoai"] != null) { TimTheLoai = Session["TimTheLoai"].ToString(); }
+                            }
+                            <p class="heading">Thể loại</p>
+                            <input type="text" list="datalistTheLoai" placeholder="" autocomplete="off" id="TheLoai" name="TheLoai" value="@TimTheLoai" />
+                            <datalist id="datalistTheLoai">
+                                @foreach (var item in ViewBag.listTheLoai as ICollection<TheLoai>)
+                                {
+                                    <option value="@item.TenTheLoai"></option>
+                                }
+                            </datalist>
+                        </div>
+                        <div class="col-sm-4">
+                            @{
+                                string TimTacGia = "";
+                                if (Session["TimTacGia"] != null) { TimTacGia = Session["TimTacGia"].ToString(); }
+                            }
+                            <p class="heading">Tác giả</p>
+                            <input type="text" list="datalistTacGia" placeholder="" autocomplete="off" id="TacGia" name="TacGia" value="@TimTacGia" />
+                            <datalist id="datalistTacGia">
+                                @foreach (var item in ViewBag.listTacGia as ICollection<TacGia>)
+                                {
+                                    <option value="@item.TenTG"></option>
+                                }
+                            </datalist>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+
+                <div>
+                    @*<a onclick="Xuat()" class="btnTimKiem">Tìm kiếm</a>*@
+                    <input type="submit" class="btnTimKiem" value="Tìm kiếm" />
+                </div>
+
+                <div id="postDiv">
+
+                </div>
+            </form>
+        </div>
+
+        <div class="breadcrumbs">
+
+        </div>
+        <div class="NhapSach">
+            <a href="~/Admin/Add" style="" class="btnThemMoi">Thêm mới</a>
+        </div>
+        <div class="table-responsive cart_info" style="margin-top: 10px;">
+            <table class="table table-condensed">
+                <thead>
+                    <tr class="cart_menu">
+                        <td class=" " style="width: 120px;">Ảnh bìa</td>
+                        <td class=" " style="width: 150px;">Tên sách</td>
+                        <td class=" " style="width: 70px;">Giá bán</td>
+                        <td class=" " style="width: 200px;">Mô tả</td>
+                        <td class=" " style="width: 80px;">Số lượng</td>
+                        <td class=" " style="width: 150px;">Tác giả</td>
+                        <td class=" " style="width: 150px;">Thể loại</td>
+                        <td class=" " style="width: 130px;">Nhà xuất bản</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="">
+                                <img src="~/Content/images/Sach_image/@item.AnhBia" alt="Ảnh bìa" style="width: 100px; height: 100px;" />
+                            </td>
+                            <td class="">
+                                @item.TenSach
+                            </td>
+                            <td class="">
+                                <label></label>
+                                @item.GiaBan
+                            </td>
+
+                            @{
+                                string MoTa = item.MoTa;
+                                if (MoTa.Length > 127)
+                                {
+                                    <td>
+                                        @MoTa.Substring(0, 127) ... <a class="XemThem" onclick="XemThem(this)">+</a>
+                                        <input type="hidden" class="GetMoTa" value="@MoTa" />
+                                    </td>
+
+                                }
+                                else
+                                {
+                                    <td class="">@MoTa</td>
+                                }
+                            }
+
+                            <td class="">
+                                @item.SoLuongTon
+                            </td>
+                            <td class="">
+                                @item.TacGia
+                            </td>
+                            <td class="">
+                                @item.TheLoai
+                            </td>
+                            <td class="">
+                                @item.NXB
+                            </td>
+                            <td class="cart_delete">
+                                <a class="btnSua" onclick="SuaSach()" href="~/Admin/Edit/@item.MaSach"><i class="fa fa-pencil-square-o" aria-hidden="true" style=""></i></a>
+                                <a class="btnXoa" onclick="XoaSach(@item.MaSach)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-12 col-md-5"></div>
+            <div class="col-sm-12 col-md-7">
+                <div class="pagination" id="dataTable_paginate" style="text-align:right">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @if (Session["Controller"].ToString() == "Admin")
+                    {
+                        if (Session["Action"].ToString() == "Index")
+                        {
+                            @Html.PagedListPager(Model, pageNum => Url.Action("Index", "Admin", new { page = pageNum }))
+                        }
+                        if (Session["Action"].ToString() == "Search")
+                        {
+                            @Html.PagedListPager(Model, pageNum => Url.Action("Search", "Admin", new { page = pageNum }))
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="hiddenInput">
+        @{ 
+            string heightScroll = "0";
+            if(Session["AdminIndex_ScrollTop"] != null)
+            {
+                heightScroll = Session["AdminIndex_ScrollTop"].ToString();
+            }
+        }
+        <input type="hidden" id="pageTop" value="@heightScroll"/>
+    </div>
+</section>
+
+<script src="~/Content/js/AdminIndexJS.js"></script>
+

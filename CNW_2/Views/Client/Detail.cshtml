@@ -1,0 +1,263 @@
+﻿@using CNW_2.Models.DTO
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@{
+    Sach_AdminIndex Sach_Detail = ViewBag.Sach_Info;
+
+}
+<head>
+    <link href="~/Content/css/ClientDetailCSS.css" rel="stylesheet" />
+</head>
+
+<section>
+</section>
+
+<section>
+    <div class="container">
+        <div class="frmBack">
+            @if (Session["Controller"].ToString() == "Client")
+            {
+                int AdminPage = Convert.ToInt32(Session["Client_Index_page"]);
+                if (AdminPage == 0) { AdminPage = 1; }
+
+                if (Session["Action"].ToString() == "Index")
+                {
+                    <a href="@Url.Action("Index", "Client", new { page = AdminPage })" class="">
+                        <i class="fa fa-arrow-left fa-lg btnBack" aria-hidden="true"></i>
+                        @*@Html.ActionLink("Quay về", "index", "Admin", new { page = Convert.ToInt32(Session["Admin_Index_page"]) }, new { @class = "btnBack" })*@
+                    </a>
+                }
+                if (Session["Action"].ToString() == "Search")
+                {
+                    <a href="@Url.Action("Search", "Client", new { page = AdminPage })" class="">
+                        <i class="fa fa-arrow-left fa-lg btnBack" aria-hidden="true"></i>
+                    </a>
+                }
+            }
+        </div>
+
+        <div class="row">
+            <div class="MoTaSP">
+                <div class="col-sm-5">
+                    <div class="detail_AnhBia">
+                        <img src="~/Content/images/Sach_image/@Sach_Detail.AnhBia" alt="Ảnh bìa" />
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="ThongTinSP">
+                        <div class="backgroud_TenSach">
+                            <p id="TenSach">@Sach_Detail.TenSach</p>
+                        </div>
+
+                        <p id="GiaBan">@Sach_Detail.GiaBan VNĐ</p>
+                        <br />
+                        <a onclick="HienGioHang()">
+                            <i class="fa fa-shopping-cart fa-3x"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="ChiTietSP">
+            <div class="TieuDe">
+                <p>CHI TIẾT SẢN PHẨM</p>
+            </div>
+            <div class="NoiDungMoTa">
+                <h4>Số lượng còn lại: </h4> <p>@Sach_Detail.SoLuongTon</p>
+                <br />
+                <h4>Thể loại: </h4> <p>@Sach_Detail.TheLoai</p>
+                <br />
+                <h4>Tác giả: </h4> <p>@Sach_Detail.TacGia</p>
+                <br />
+                <h4>Nhà xuất bản: </h4> <p>@Sach_Detail.NXB</p>
+                <br />
+                <h4>Mô tả: </h4> <p>@Sach_Detail.MoTa</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="blank_background">
+
+    </div>
+
+    <div class="frmThemVaoGio">
+        <form id="frmGioHang" class='' action="/Client/Cart" method="post" enctype="multipart/form-data" name="">
+            <input type="hidden" id="cart_MaSach" value="@Sach_Detail.MaSach"/>
+            <div class="TieuDeGioHang">
+                <div class="TieuDe">
+                    Thêm vào giỏ hàng
+                </div>
+                <div class="btnThoatGioHang" id="btnOutCart" onclick="ThoatGioHang()">
+                    x
+                </div>
+            </div>
+            <div class="row ChiTiet">
+                <div class="col-sm-3">
+                    <img id="cart_AnhBia" src="~/Content/images/Sach_image/@Sach_Detail.AnhBia" alt="Ảnh bìa" />
+                </div>
+                <div class="col-sm-9">
+                    <div id="cart_TenSach" class="TenSP">@Sach_Detail.TenSach</div>
+                    <p id="cart_GiaTien">Giá tiền: @Sach_Detail.GiaBan</p>
+                    <p id="cart_SoLuongTon">Số lượng còn lại: @Sach_Detail.SoLuongTon</p>
+                </div>
+            </div>
+            <hr />
+            <div class="row LuaChonSoLuong">
+                <div class="col-sm-3">
+                    Số lượng
+                </div>
+                <div class="col-sm-9">
+                    <div class="SoLuong">
+                        <input id="cart_minus" type="button" value="-" onclick="TangGiamSoLuong_Cart(this)">
+                        <input type="number" value="1" max="@Sach_Detail.SoLuongTon" min="0" id="cart_number" onkeydown="return SoLuong_Cart_keyDown(event)" onkeyup="SoLuong_Cart_keyUp()">
+                        <input id="cart_plus" type="button" value="+" onclick="TangGiamSoLuong_Cart(this)">
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row TongTienSP">
+                <div class="col-sm-3">
+                    Tổng tiền
+                </div>
+                <div class="col-sm-9">
+                    <div class="TongTien">
+                        <p id="cart_TongTien"></p>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="btnThemVaoGioHang">
+                <a id="AddToCart" onclick="SubmitGioHang()">Thêm vào Giỏ hàng</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section>
+    <div class="bottomSpace">
+
+    </div>
+</section>
+
+<script>
+    //---------------------------------JS GIỎ HÀNG------------------------------------------
+
+    function HienGioHang() {
+        $('.blank_background').show();
+        $('.frmThemVaoGio').show();
+
+        $("#cart_number").val(1);
+        document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ'
+    }
+
+    function ThoatGioHang() {
+        $('.blank_background').hide();
+        $('.frmThemVaoGio').hide();
+    }
+
+    function TangGiamSoLuong_Cart(qu) {
+        //debugger;
+        if (qu.value == '+') {
+            $("#cart_number").val(Number($("#cart_number").val()) + 1);
+            if (Number($("#cart_number").val()) > Number($("#cart_number").attr("max"))) {
+                $("#cart_number").val(Number($("#cart_number").attr("max")));
+            }
+            document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ'
+        }
+        else if (qu.value == '-') {
+            $("#cart_number").val(Number($("#cart_number").val()) - 1);
+            if (Number($("#cart_number").val()) <= 0) {
+                $("#cart_number").val(1);
+            }
+            document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ';
+        }
+    }
+
+    //---------------------------------ONCHANGED() INPUT NUMBER-----------------------------
+    function SoLuong_Cart_keyDown(event) {
+        var key;
+        if (window.event) {
+            key = window.event.key;
+            //debugger;
+        }
+        if (key == "." || key == "-" || key == "+") {
+            return false;
+        }
+    }
+
+    function SoLuong_Cart_keyUp() {
+        if ($("#cart_number").val() != '') {
+            if ($("#cart_number").val() == '0') {
+                $("#cart_number").val(1);
+            }
+
+            var GiaTien = Number($("#cart_GiaTien").text().substring(10));
+            var SoLuong = Number($("#cart_number").val());
+
+            var maxValue = Number($("#cart_number").attr("max"));
+
+            if (SoLuong > maxValue) {
+                $("#cart_number").val($("#cart_number").attr("max"));
+            }
+            $("#cart_TongTien").text(GiaTien * SoLuong + ' VNĐ');
+
+        }
+    }
+    function SoLuong_cart() {
+        //debugger;
+        document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ';
+        //debugger;
+        if (Number($("#cart_number").val()) <= 0) {
+            $("#cart_number").val(1);
+            document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ';
+        }
+        if (Number($("#cart_number").val()) > Number($("#cart_number").attr("max"))) {
+            $("#cart_number").val($("#cart_number").attr("max"));
+            document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ';
+        }
+    }
+
+    function SubmitGioHang() {
+        if ($("#cart_number").val() == '') {
+            alert("Vui lòng nhập vào một giá trị số lượng !!!");
+            $("#cart_number").val(1);
+            document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ';
+        }
+        else {
+            var obj = JSON.stringify({
+                MaSach: Number($("#cart_MaSach").val()),
+                SoLuong: Number($("#cart_number").val())
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Cart/ThemGioHang",
+                data: obj,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            }).done(function (response) {
+                if (response == "newItem") {
+                    var numberCartItems = document.getElementById("number_cartItems");
+                    numberCartItems.innerHTML = Number(numberCartItems.innerHTML) + 1;
+                    alert("Đã thêm vào giỏ hàng");
+                }
+                else if (response == "availableItem") {
+                    alert("Đã thêm vào giỏ hàng");
+                }
+                else {
+                    alert("Có lỗi khi thêm vào giỏ hàng");
+                }
+            }).fail(function (response) {
+
+            });
+
+            ThoatGioHang();
+        }
+    }
+</script>

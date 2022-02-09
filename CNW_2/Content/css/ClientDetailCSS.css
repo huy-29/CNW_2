@@ -1,0 +1,300 @@
+﻿body {
+}
+
+.bottomSpace{
+    margin-top: 60px;
+}
+
+/*---------------------------------------------------------------------------------*/
+/*------------------------------------BUTTON BACK----------------------------------*/
+/*---------------------------------------------------------------------------------*/
+.frmBack {
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.btnBack {
+    background-color: #FE980F;
+    color: white;
+    width: 40px;
+    height: 40px;
+    padding: 11px;
+    border-radius: 50%;
+}
+
+    .btnBack:hover {
+        background-color: #f4c383;
+    }
+
+/*---------------------------------------------------------------------------------*/
+/*---------------------------------MÔ TẢ SẢN PHẨM----------------------------------*/
+/*---------------------------------------------------------------------------------*/
+.MoTaSP{
+	width: 100%;
+	height: 400px;
+	margin-bottom: 100px;
+}
+
+.MoTaSP .detail_AnhBia{
+	width: 450px;
+	height: 400px;
+	background-color: white;
+}
+
+.MoTaSP .detail_AnhBia img{
+	width: 80%;
+	height: 80%;
+	margin: auto 10% auto 10%;
+}
+
+.MoTaSP .ThongTinSP{
+	position: absolute;
+	top: 0;
+	left: 0;
+	border: 1px solid #ede9e9;
+	border-radius: 5px;
+	width: 650px;
+	height: 400px;
+	background-color: white;
+}
+
+.MoTaSP .ThongTinSP .backgroud_TenSach{
+	background-color: #e4dcdc;
+	border-radius: 5px 5px 0 0;
+	height: 220px;
+}
+
+.MoTaSP .ThongTinSP #TenSach{
+	width: 520px;
+	margin-left: 60px;
+	margin-top: 30px;
+	font-size: 26px;
+}
+
+.MoTaSP .ThongTinSP #GiaBan {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+    margin-bottom: 120px;
+	margin-left: 60px;
+    font-size: 30px;
+    font-weight: 400;
+    color: #FE980F;
+}
+
+.MoTaSP .ThongTinSP a {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	margin-bottom: 20px;
+    margin-left: 60px;
+    color: white;
+    background-color: #ea4646;
+    padding: 20px 25px;
+    border-radius: 6px;
+}
+
+.MoTaSP .ThongTinSP a:hover{
+    background-color: #e98f8f;
+    cursor: pointer;
+}
+
+
+/*---------------------------------------------------------------------------------*/
+/*--------------------------------CHI TIẾT SẢN PHẨM--------------------------------*/
+/*---------------------------------------------------------------------------------*/
+
+.ChiTietSP {
+    /*border: 1px solid #F7F7F0;*/
+    border: 1px solid #e4dcdc;
+    width: 100%;
+    height: 500px;
+}
+
+.ChiTietSP .TieuDe{
+    /*border: 1px solid blue;*/
+    background-color: #e4dcdc;
+}
+
+    .ChiTietSP .TieuDe p {
+        font-size: 18px;
+        font-weight: 400;
+        margin: 20px 0 20px 20px;
+        font-family: 'Roboto', sans-serif;
+    }
+
+.ChiTietSP .NoiDungMoTa {
+    height: 70%;
+    /*border: 1px solid green;*/
+    padding-left: 15px;
+}
+
+.ChiTietSP .NoiDungMoTa h4,p{
+    display: inline-block;
+}
+
+.ChiTietSP .NoiDungMoTa h4{
+    line-height: 5px;
+    font-size: 17px;
+    font-weight: bold;
+    opacity: 70%;
+    padding-right: 5px;
+    font-style:italic
+}
+
+.ChiTietSP .NoiDungMoTa p{
+    font-size: 16px;
+}
+
+/*----------------------------------------------------------------------------------------*/
+/*---------------------------------FORM THÊM VÀO GIỎ--------------------------------------*/
+/*----------------------------------------------------------------------------------------*/
+
+.blank_background{
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-color: #808080;
+	opacity: 40%;
+}
+
+.frmThemVaoGio {
+	display: none;
+	position: fixed;
+	top: calc(50vh - 150px);
+	left: calc(50vw - 225px);
+	width: 450px;
+	height: 300px;
+	/*margin: auto auto auto auto;*/
+	/*border: 1px solid #808080;*/
+	background-color: white;
+	border-radius: 3px;
+}
+
+.frmThemVaoGio .row{
+	margin: auto auto auto auto;
+}
+
+.frmThemVaoGio p{
+	display: block;
+}
+
+.frmThemVaoGio .TieuDeGioHang{
+	display: flex;
+	background-color: #1a5cbe;
+	border-radius: 3px 3px 0 0;
+}
+
+.frmThemVaoGio .TieuDeGioHang .TieuDe{
+	color: white;
+	padding: 3px 0 3px 6px;
+}
+
+.frmThemVaoGio .TieuDeGioHang .btnThoatGioHang{
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-weight: 700;
+	color: white;
+	background-color: #b9b0b0;
+	padding: 3px 10px;
+	transition: background-color .5s;
+}
+
+.frmThemVaoGio .TieuDeGioHang .btnThoatGioHang:hover{
+	cursor: pointer;
+	background-color: #f60c0c;
+}
+
+.frmThemVaoGio img{
+	width: 80px;
+	height: 80px;
+	margin: 10px auto 10px auto;
+	border: 3px solid red;
+}
+
+.frmThemVaoGio .ChiTiet .col-sm-9{
+	padding-top: 20px;
+}
+
+.frmThemVaoGio .ChiTiet .col-sm-9 .TenSP{
+	line-height: 15px;
+	height: 30px;
+	margin-bottom: 10px;
+	font-family: 'Roboto', sans-serif;
+	/*font-size: 15px;*/
+	opacity: 75%;
+}
+
+.frmThemVaoGio .ChiTiet .col-sm-9 p{
+	line-height: 9px;
+}
+
+.frmThemVaoGio hr{
+	margin-top: 10px;
+    margin-bottom: 10px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+.frmThemVaoGio .LuaChonSoLuong{
+	padding: 10px 0 10px 0;
+	display: flex;
+}
+
+.frmThemVaoGio .LuaChonSoLuong .SoLuong{
+	position: absolute;
+	right: 0;
+	margin-right: 30px;
+}
+
+.frmThemVaoGio .LuaChonSoLuong .SoLuong input[type=number]{
+	width: 50px;
+	text-align: center;
+}
+
+.frmThemVaoGio .LuaChonSoLuong .SoLuong input[type = number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+.frmThemVaoGio .TongTienSP .TongTien{
+	position: absolute;
+	right: 0;
+	margin-right: 30px;
+}
+
+.frmThemVaoGio .TongTienSP .TongTien p{
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.frmThemVaoGio .btnThemVaoGioHang{
+	margin-left: 80px;
+	margin-top: 20px;
+}
+
+.frmThemVaoGio .btnThemVaoGioHang a{
+	background-color: #fa2a2a;
+	padding: 8px 80px;
+	border-radius: 3px;
+	color: white;
+}
+
+.frmThemVaoGio .btnThemVaoGioHang a:hover{
+	cursor: pointer;
+	background-color: #f17171;
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,181 @@
+﻿@using CNW_2.Models.DTO
+
+@{
+    TaiKhoan_Info tk = null;
+    if (Session["ThongTinDangNhap"] != null)
+    {
+        tk = Session["ThongTinDangNhap"] as TaiKhoan_Info;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    @*<title>Home | E-Shopper</title>*@
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/css/prettyPhoto.css" rel="stylesheet">
+    <link href="~/Content/css/price-range.css" rel="stylesheet">
+    <link href="~/Content/css/animate.css" rel="stylesheet">
+    <link href="~/Content/css/main.css" rel="stylesheet">
+    <link href="~/Content/css/responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/Content/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/Content/images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/Content/images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="~/Content/images/ico/apple-touch-icon-57-precomposed.png">
+</head><!--/head-->
+
+<body>
+    <header id="header">
+        <!--header-->
+        <div class="header_top">
+            <!--header_top-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="contactinfo">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+
+                    </div>
+                </div>
+            </div>
+        </div><!--/header_top-->
+
+        <div class="header-middle">
+            <!--header-middle-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div class="mainmenu pull-left">
+                            <ul id="MenuChoice" class="nav navbar-nav collapse navbar-collapse">
+                                <li><a href="~/Client/Index" @*class="active"*@ onclick="headingClick(this)">Trang chủ</a></li>
+                                @if (tk != null)
+                                {
+                                    if (tk.ChucVu == "Admin" || tk.ChucVu == "NhanVien")
+                                    {
+                                        <li><a href="~/Admin/Index" onclick="headingClick(this)">Admin</a></li>
+                                    }
+                                }
+
+                                @*<li class="dropdown">
+                                        <a href="#">Quản lý sản phẩm<i class="fa fa-angle-down"></i></a>
+                                        <ul role="menu" class="sub-menu">
+                                            <li><a href="#">Lựa chọn 1</a></li>
+                                            <li><a href="#">Lựa chọn 2</a></li>
+                                        </ul>
+                                    </li>*@
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="shop-menu pull-right">
+                            <ul class="nav navbar-nav">
+                                @{
+                                    if (tk != null)
+                                    {
+                                        <li><a href=""><i class="fa fa-user fa-2x"></i> Tài khoản</a></li>
+                                        <li><a href="~/Login/Index"><i class="fa fa-sign-in fa-2x"></i> Đăng xuất</a></li>
+                                        if (tk.ChucVu == "KhachHang")
+                                        {
+                                            <li>
+                                                <div class="cartItems">
+                                                    <a href="~/Cart/Index"><i class="fa fa-shopping-cart fa-2x"></i> Giỏ hàng</a>
+                                                    @{
+                                                        int numberCartItems = 0;
+                                                        if (Session["numberCartItems"] != null)
+                                                        {
+                                                            numberCartItems = Convert.ToInt32(Session["numberCartItems"]);
+                                                        }
+                                                    }
+                                                    <p id="number_cartItems">@numberCartItems</p>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <li><a href="~/Login/Index"><i class="fa fa-sign-in fa-2x" aria-hidden="true"></i> Đăng nhập</a></li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--/header-middle-->
+
+        <div class="header-bottom">
+            <!--header-bottom-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-9">
+
+                    </div>
+                    <div class="col-sm-3">
+
+                    </div>
+                </div>
+            </div>
+        </div><!--/header-bottom-->
+    </header><!--/header-->
+
+    @RenderBody()
+    <section>
+        <div class="container">
+            <div class="row">
+                <!-- <div class="col-sm-9 padding-right"> -->
+                <div class="col-sm- ">
+                    <div class="category-tab">
+                        <!--category-tab-->
+                    </div><!--/category-tab-->
+
+                    <div class="recommended_items">
+                        <!--recommended_items-->
+                    </div><!--/recommended_items-->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="~/Content/js/jquery.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/jquery.scrollUp.min.js"></script>
+    <script src="~/Content/js/price-range.js"></script>
+    <script src="~/Content/js/jquery.prettyPhoto.js"></script>
+    <script src="~/Content/js/main.js"></script>
+
+    <script>
+        function headingClick(mn) {
+            var ul = document.getElementById("MenuChoice");
+            var items = ul.getElementsByTagName("li");
+            for (var i = 0; i < items.length; ++i) {
+                $(items[i]).find("a").removeClass("active");
+            }
+
+            $(mn).parent().find("a").addClass("active");
+
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "";
+}
+
+<head>
+    <link href="~/Content/css/LoginIndexCSS.css" rel="stylesheet" />
+</head>
+
+<input type="hidden" id="alert" value="@ViewBag.ThongBao"/>
+
+<section>
+    <div class="content_top">
+        <img src="data:image/jpeg;base64,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" onclick="window.location.pathname = '/Client/Index/'" />
+        <p id="TieuDe">Đăng nhập</p>
+    </div>
+
+    <div class="content_middle">
+        <div class="pnl_DangNhap">
+            <form id="frmLogin" action="/Login/Index" method="post" enctype="multipart/form-data" name="frmLogin">
+                <p class="lbl_DangNhap">Đăng nhập</p>
+                <input type="text" id="TenDangNhap" placeholder="Tên đăng nhập" name="TenDangNhap" />
+                <input type="password" id="MatKhau" placeholder="Mật khẩu" name="MatKhau" />
+                @*<input type="text" id="SoDienThoai" placeholder="Số điện thoại" />*@
+                @*<input type="text" id="DiaChi" placeholder="Địa chỉ" />*@
+                <a id="btnDangNhap" onclick="DangNhap_onclick()">Đăng nhập</a>
+                <br />
+                <a onclick="alert('havent doneeeeeeeeeeeeeeeee yêt')" id="link_DangKy">Đăng ký</a>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script src="~/Content/js/bootstrap.min.js"></script>
+<script src="~/Content/js/jquery.js"></script>
+<script src="~/Content/js/jquery.scrollUp.min.js"></script>
+
+<script>
+    (function () {
+        /*document.documentElement.scrollTop = document.getElementById("pageTop").value;*/
+        //debugger;
+        if ($("#alert").val() != '') { alert($("#alert").val()); }
+    })()
+
+    function DangNhap_onclick() {
+        //debugger;
+        //var obj = JSON.stringify({
+        //    TenDangNhap: $("#TenDangNhap").val(),
+        //    MatKhau: $("#MatKhau").val()
+        //});
+
+        //$.ajax({
+        //    type: "Post",
+        //    url: '/Login/DangNhap',
+        //    data: obj,
+        //    contentType: "application/json; charset=utf-8",
+        //    dataType: "json",
+        //});
+
+        $("#frmLogin").submit();
+    }
+</script>
+

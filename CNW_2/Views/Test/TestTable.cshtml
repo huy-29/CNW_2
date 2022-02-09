@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewBag.Title = "TestTable";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<section class="cart_items" style="margin-bottom: 300px;">
+    <form id="frmAddProduct" class='formValidation' action="/Vaccine/Add" method="post" enctype="multipart/form-data" name="frmAddProduct">
+        <div class="row">
+            <div class="col span-1-of-2">
+                <h4 style="display: inline-block; margin-left: 200px; margin-top: 30px;">Tên lô vaccine</h4>
+                <input type="text" placeholder="" style="padding: 4px; width: 300px;" autocomplete="off" id="LoVaccine" />
+
+                <h4 style="display: inline-block; margin-left: 200px; margin-top: 30px;">Đơn giá lô vaccine</h4>
+                <input type="text" placeholder="" style="padding: 4px;" autocomplete="off" id="DonGiaLoVaccine" />
+                <br>
+
+                <h4 for="TenNCC" style="display: inline-block; margin-left: 450px; margin-top: 20px;">Nhà cung cấp</h4>
+                <select style="width: 320px; background-color: white; border: 1px solid black;" id="TenNCC">
+                    @*@foreach (var item in ViewBag.ListNhaCC as ICollection<NhaCungCap>)
+                        {
+                            <option value="@item.MaNCC">@item.TenNCC</option>
+                        }*@
+                    <option value="option-1">option 1</option>
+                    <option value="option-1">option 2</option>
+                    <option value="option-1">option 3</option>
+                </select>
+                <br>
+            </div>
+            <div class="col span-2-of-2" style="margin-bottom: 20px;">
+                <h4 style="display: inline-block; margin-left: 50px; margin-top: 10px; width: 116px;">Tên vaccine</h4>
+                <input type="text" placeholder="" style="padding: 1px;" autocomplete="off" id="TenVaccine" />
+                <br>
+                <h4 style="display: inline-block; margin-left: 50px; margin-top: 10px; width: 116px;">Loại vaccine</h4>
+                <input type="text" list="productName" style="padding: 1px;" autocomplete="off" id="LoaiVaccine" />
+                <datalist id="productName">
+                    @*@foreach (var item in ViewBag.listLoaiVC as ICollection<LoaiVaccine>)
+                        {
+                            <option value="@item.TenLoaiVaccine"></option>
+                        }*@
+                    <option value="option 1"></option>
+                    <option value="option 2"></option>
+                    <option value="option 3"></option>
+                </datalist>
+                <br>
+                <h4 style="display: inline-block; margin-left: 50px; margin-top: 10px; width: 116px;">Ngày sản xuất</h4>
+                <input type="text" placeholder="" style="padding: 1px;" autocomplete="off" id="NSX" />
+                <br>
+                <h4 style="display: inline-block; margin-left: 50px; margin-top: 10px; width: 116px;">Hạn sử dụng</h4>
+                <input type="text" placeholder="" style="padding: 1px;" autocomplete="off" id="HSD" />
+                <br>
+                <h4 style="display: inline-block; margin-left: 50px; margin-top: 10px; width: 116px;">Số lượng</h4>
+                <input type="text" placeholder="" style="padding: 1px;" autocomplete="off" id="SoLuong" />
+                <br>
+                <h4 style="display: inline-block; margin-left: 50px; margin-top: 10px; width: 116px;">Đơn vị tính</h4>
+                <input type="text" placeholder="" style="padding: 1px;" autocomplete="off" id="DVT" />
+                <br>
+                <h4 style="display: inline-block; margin-left: 50px; margin-top: 10px; width: 116px;">Liều lượng</h4>
+                <input type="text" placeholder="" style="padding: 1px;" autocomplete="off" id="LieuLuong" />
+                <br>
+                <h4 style="display: inline-block; margin-left: 50px; margin-top: 10px; width: 116px;">Đơn giá</h4>
+                <input type="text" placeholder="" style="padding: 1px;" autocomplete="off" id="DonGia" />
+                <br>
+                <h4 style="display: inline-block; margin-left: 50px; margin-top: 10px; width: 116px;">Loại bệnh</h4>
+                <input type="text" placeholder="" style="padding: 1px;" autocomplete="off" id="LoaiBenh" />
+            </div>
+            <div class="control">
+                <a onclick="addVaccine()" style="background-color: green; color: white; padding: 8px; margin-left: 50px;">
+                    Thêm vaccine
+                </a>
+            </div>
+
+            <section id="cart_items">
+                <div class="container">
+                    <div class="table-responsive cart_info" style="margin-top: 50px;">
+                        <table id="tblVaccine" class="table table-condensed">
+                            <thead>
+                                <tr class="cart_menu">
+                                    <td class="vaccine">Tên vaccine</td>
+                                    <td class="loaivaccine">NSX</td>
+                                    <td class="price">HSD</td>
+                                    <td class="quantity">Số lượng</td>
+                                    <td class="total">Đơn vị tính</td>
+                                    <td class="total">Liều lượng</td>
+                                    <td class="total">Đơn giá</td>
+                                    <td class="total">Loại bệnh</td>
+                                    <td class="total">Loại vaccine</td>
+                                    <td class="total">Lô vaccine</td>
+                                    <td class="total">Đơn giá lô</td>
+                                    <td class="total">Nhà cung cấp</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section> <!--/#cart_items-->
+
+            <div>
+                <input type="submit" value="Nhập vaccine">
+            </div>
+        </div>
+
+        <div id="postDiv">
+
+        </div>
+
+    </form>
+</section>
+
+
+<script>
+        function addVaccine() {
+            var divPost = document.getElementById("postDiv");
+
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("TenVaccine").value) + '" name="TenVaccine" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("NSX").value) + '" name="NSX" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("HSD").value) + '" name="HSD" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("SoLuong").value) + '" name="SoLuong" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("DVT").value) + '" name="DVT" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("LieuLuong").value) + '" name="LieuLuong" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("DonGia").value) + '" name="DonGia" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("LoaiBenh").value) + '" name="LoaiBenh" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("LoaiVaccine").value) + '" name="LoaiVaccine" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("LoVaccine").value) + '" name="LoVaccine" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("DonGiaLoVaccine").value) + '" name="DonGiaLoVaccine" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("TenNCC").value) + '" name="TenNCC" />';
+
+            var table = document.getElementById("tblVaccine");
+            var row = table.insertRow(table.rows.length);
+            var cell0 = row.insertCell(0);
+            var cell1 = row.insertCell(1);
+            var cell2 = row.insertCell(2);
+            var cell3 = row.insertCell(3);
+            var cell4 = row.insertCell(4);
+            var cell5 = row.insertCell(5);
+            var cell6 = row.insertCell(6);
+            var cell7 = row.insertCell(7);
+            var cell8 = row.insertCell(8);
+            var cell9 = row.insertCell(9);
+            var cell10 = row.insertCell(10);
+            var cell11 = row.insertCell(11);
+
+            cell0.innerHTML = String(document.getElementById("TenVaccine").value);
+            cell1.innerHTML = String(document.getElementById("NSX").value);
+            cell2.innerHTML = String(document.getElementById("HSD").value);
+            cell3.innerHTML = String(document.getElementById("SoLuong").value);
+            cell4.innerHTML = String(document.getElementById("DVT").value);
+            cell5.innerHTML = String(document.getElementById("LieuLuong").value);
+            cell6.innerHTML = String(document.getElementById("DonGia").value);
+            cell7.innerHTML = String(document.getElementById("LoaiBenh").value);
+            cell8.innerHTML = String(document.getElementById("LoaiVaccine").value);
+            cell9.innerHTML = String(document.getElementById("LoVaccine").value);
+            cell10.innerHTML = String(document.getElementById("DonGiaLoVaccine").value);
+            cell11.innerHTML = String(document.getElementById("TenNCC").value);
+
+            $("#TenNCC option:not(:selected)").prop("disabled", true);
+            document.getElementById("LoVaccine").readOnly = true;
+            document.getElementById("DonGiaLoVaccine").readOnly = true;
+        }
+</script>
+
+

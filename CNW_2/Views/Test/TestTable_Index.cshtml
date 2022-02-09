@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "TestTable_Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<section id="cart_items">
+    <div class="container">
+        <div class="breadcrumbs">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">Shopping Cart</li>
+            </ol>
+        </div>
+        <div class="NhapVaccine">
+            <a href="~/Vaccine/Add" style="background-color: green; color: white; padding: 8px;">Nhập vaccine</a>
+            <a href="~/Vaccine/XuatVC" style="background-color: darkblue; color: white; padding: 8px; margin-left: 20px;">Xuất vaccine</a>
+            <a href="~/Vaccine/GoiVaccine" style="background-color:blueviolet ; color: white; padding: 8px; margin-left: 70px;">Tạo gói vaccine</a>
+        </div>
+        <div class="table-responsive cart_info" style="margin-top: 10px;">
+            <table class="table table-condensed">
+                <thead>
+                    <tr class="cart_menu">
+                        <td class=" ">Tên vaccine</td>
+                        <td class=" ">Loại vaccine</td>
+                        <td class=" ">Ngày SX</td>
+                        <td class=" ">Hạn SD</td>
+                        <td class=" ">Đơn giá</td>
+                        <td class=" ">Số lượng</td>
+                        <td class=" ">Liều lượng</td>
+                        <td class=" ">Đơn vị tính</td>
+                        <td class=" ">Bệnh</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="">
+                                @Html.DisplayFor(modelItem => item.TenVaccine)
+                            </td>
+                            <td class="">
+                                @Html.DisplayFor(modelItem => item.TenLoaiVaccine)
+                            </td>
+                            <td class="">
+                                @Html.DisplayFor(modelItem => item.NgaySX)
+                            </td>
+                            <td class="">
+                                @Html.DisplayFor(modelItem => item.HSD)
+                            </td>
+                            <td class="">
+                                @Html.DisplayFor(modelItem => item.DonGia)
+                            </td>
+                            <td class="">
+                                @Html.DisplayFor(modelItem => item.SoLuong)
+                            </td>
+                            <td class="">
+                                @Html.DisplayFor(modelItem => item.LieuLuong)
+                            </td>
+                            <td class="">
+                                @Html.DisplayFor(modelItem => item.DonViTinh)
+                            </td>
+                            <td class="">
+                                @Html.DisplayFor(modelItem => item.LoaiBenh)
+                            </td>
+                            <td class="cart_delete">
+                                <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    }*@
+
+                    <tr>
+                        <td class="">
+                            kousei
+                        </td>
+                        <td class="">
+                            kaori
+                        </td>
+                        <td class="">
+                            tsubaki
+                        </td>
+                        <td class="">
+                            fuwafuwana
+                        </td>
+                        <td class="">
+                            hachiman
+                        </td>
+                        <td class="">
+                            yukino
+                        </td>
+                        <td class="">
+                            yui
+                        </td>
+                        <td class="">
+                            hekki
+                        </td>
+                        <td class="">
+                            hekki
+                        </td>
+                        <td class="cart_delete">
+                            <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section> <!--/#cart_items-->

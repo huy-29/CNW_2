@@ -1,0 +1,393 @@
+﻿@using CNW_2.Models.DTO
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<head>
+    <link href="~/Content/css/AdminAdd.css" rel="stylesheet" />
+</head>
+
+
+<section class="cart_items" style="margin: auto auto 300px 200px;" >
+    <div class="frmBack">
+        @if (Session["Controller"].ToString() == "Admin")
+        {
+            int AdminPage = Convert.ToInt32(Session["Admin_Index_page"]);
+            if (AdminPage == 0) { AdminPage = 1; }
+
+            if (Session["Action"].ToString() == "Index")
+            {
+                <a href="@Url.Action("Index", "Admin", new { page = AdminPage })" class="">
+                    <i class="fa fa-arrow-left fa-lg btnBack" aria-hidden="true"></i>
+                    @*@Html.ActionLink("Quay về", "index", "Admin", new { page = Convert.ToInt32(Session["Admin_Index_page"]) }, new { @class = "btnBack" })*@
+                </a>
+            }
+            if (Session["Action"].ToString() == "Search")
+            {
+                <a href="@Url.Action("Search", "Admin", new { page = AdminPage })" class="">
+                    <i class="fa fa-arrow-left fa-lg btnBack" aria-hidden="true"></i>
+                </a>
+            }
+        }
+    </div>
+
+    <div class="ResetForm">
+        <a onclick="ResetForm()">Reset</a>
+    </div>
+
+    <form id="frmAddProduct" class='formValidation' action="/Admin/Add" method="post" enctype="multipart/form-data" name="frmAddProduct">
+        <div class="frmDienThongTin">
+            <p class="Add_heading">Tên sách</p>
+            <input type="text" placeholder="" autocomplete="off" id="TenSach" />
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="Add_headingrow_GiaBan">Giá bán</p>
+                    <input type="text" placeholder="" autocomplete="off" id="GiaBan" />
+                </div>
+                <div class="col-sm-3">
+                    <p class="Add_headingrow">Số lượng</p>
+                    <input type="text" placeholder="" autocomplete="off" id="SoLuong" />
+                </div>
+                <div class="col-sm-6">
+                    <p class="Add_headingrow">Nhà xuất bản</p>
+                    <input type="text" list="datalistNXB" placeholder="" autocomplete="off" id="NXB" />
+                    <datalist id="datalistNXB">
+                        @foreach (var item in ViewBag.listNXB as ICollection<NhaXuatBan>)
+                        {
+                            <option value="@item.TenNXB"></option>
+                        }
+                    </datalist>
+                </div>
+            </div>
+            <div class="listTG_TheLoai">
+                <p class="Add_heading">Tác giả</p>
+                <input type="text" list="datalistTacGia" placeholder="" autocomplete="off" id="TacGia" />
+                <datalist id="datalistTacGia">
+                    @foreach (var item in ViewBag.listTacGia as ICollection<TacGia>)
+                    {
+                        <option value="@item.TenTG"></option>
+                    }
+                </datalist>
+                <a onclick="addListTacGia()" class="btnThem_TacGia_TheLoai">+</a>
+                <input type="text" placeholder="" autocomplete="off" id="listTacGia" />
+
+                <br />
+
+                <p class="Add_heading">Thể loại</p>
+                <input type="text" list="datalistTheLoai" placeholder="" autocomplete="off" id="TheLoai" />
+                <datalist id="datalistTheLoai">
+                    @foreach (var item in ViewBag.listTheLoai as ICollection<TheLoai>)
+                    {
+                        <option value="@item.TenTheLoai"></option>
+                    }
+                </datalist>
+                <a onclick="addListTheLoai()" class="btnThem_TacGia_TheLoai">+</a>
+                <input type="text" placeholder="" autocomplete="off" id="listTheLoai" />
+            </div>
+            <br />
+            <p class="Add_heading">Mô tả</p>
+            <textarea placeholder="" autocomplete="off" id="MoTa"></textarea>
+            <br />
+
+            <div class="UploadPicture">
+                <p class="Add_heading_AnhBia">Chọn ảnh bìa</p>
+                <input type="file" id="AnhBia" name="AnhBia" onchange="loadFile(event)">
+                <label for="AnhBia"><i class="fa fa-upload" aria-hidden="true"></i></label>
+                <label class="XoaAnhBia" onclick="XoaAnhBia()"><i class="fa fa-times fa-lg" aria-hidden="true"></i></label>
+                <img id="output_AnhBia" />
+            </div>
+
+            <div class="div_btnThemMoi">
+                <a onclick="addSachToTable()" class="btnThemVaoBang">
+                    Thêm sách vào bảng
+                </a>
+            </div>
+        </div>
+
+        <section id="cart_items">
+            <div class="container">
+                <div class="table-responsive cart_info" style="margin: 50px 100px auto -90px;">
+                    <table id="tblSach" class="table table-condensed">
+                        <thead>
+                            <tr class="cart_menu">
+                                <td class=" " style="width: 120px;">Ảnh bìa</td>
+                                <td class=" " style="width: 150px;">Tên sách</td>
+                                <td class=" " style="width: 70px;">Giá bán</td>
+                                <td class=" " style="width: 200px;">Mô tả</td>
+                                <td class=" " style="width: 80px;">Số lượng</td>
+                                <td class=" " style="width: 170px;">Tác giả</td>
+                                <td class=" " style="width: 170px;">Thể loại</td>
+                                <td class=" " style="width: 110px;">Nhà xuất bản</td>
+                                <td class=" "></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section> <!--/#cart_items-->
+
+        <div>
+            <a onclick="Xuat()" class="btnSubmit">Lưu danh sách</a>
+        </div>
+
+        <div id="postDiv">
+
+        </div>
+    </form>
+</section>
+
+<script>
+    function ResetForm() {
+        document.getElementById("TenSach").value = '';
+        document.getElementById("GiaBan").value = '';
+        document.getElementById("MoTa").value = '';
+        document.getElementById("SoLuong").value = '';
+        document.getElementById("TacGia").value = '';
+        document.getElementById("TheLoai").value = '';
+        document.getElementById("listTacGia").value = '';
+        document.getElementById("listTheLoai").value = '';
+        document.getElementById("NXB").value = '';
+
+        document.getElementById("output_AnhBia").removeAttribute("src");
+        $("#AnhBia").val('');
+        //debugger;
+    }
+
+    var loadFile = function (event) {
+        var output = document.getElementById('output_AnhBia');
+        output.src = URL.createObjectURL(event.target.files[0]);
+    };
+
+    function XoaAnhBia() {
+        document.getElementById("output_AnhBia").removeAttribute("src");
+        $("#AnhBia").val('');
+    }
+</script>
+<script>
+    function addListTacGia() {
+        var txbListTacGia = document.getElementById("listTacGia");
+        var TacGia = document.getElementById("TacGia");
+
+        TacGia.value = TacGia.value.trim();
+
+        if (TacGia.value != '') {
+            if (txbListTacGia.value == '') {
+                txbListTacGia.value = TacGia.value;
+            }
+            else {
+                txbListTacGia.value = txbListTacGia.value + ', ' + TacGia.value;
+            }
+        }
+        TacGia.value = '';
+        TacGia.focus();
+    }
+
+    function addListTheLoai() {
+        var txbListTheLoai = document.getElementById("listTheLoai");
+        var TheLoai = document.getElementById("TheLoai");
+
+        TheLoai.value = TheLoai.value.trim();
+
+        if (TheLoai.value != '') {
+            if (txbListTheLoai.value == '') {
+                txbListTheLoai.value = TheLoai.value;
+            }
+            else {
+                txbListTheLoai.value = txbListTheLoai.value + ', ' + TheLoai.value;
+            }
+        }
+        TheLoai.value = '';
+        TheLoai.focus();
+    }
+
+    function addSachToTable() {
+        //COPY INPUT IMAGE
+        var x = $("#AnhBia"),
+            y = x.clone();
+        y.attr("id", "post_AnhBia");
+        y.attr("name", "post_AnhBia");
+        y.attr("alt", "Ảnh bìa");
+
+        var table = document.getElementById("tblSach");
+        var row = table.insertRow(table.rows.length);
+        var cell0 = row.insertCell(0);
+        var cell1 = row.insertCell(1);
+        var cell2 = row.insertCell(2);
+        var cell3 = row.insertCell(3);
+        var cell4 = row.insertCell(4);
+        var cell5 = row.insertCell(5);
+        var cell6 = row.insertCell(6);
+        var cell7 = row.insertCell(7);
+        var cell8 = row.insertCell(8);
+        //'<input type="file" src="" />'
+        //<img />
+
+        cell0.innerHTML = '<img src="' + $("#output_AnhBia").attr("src") + '" id="img_post"  alt="Ảnh bìa" />';
+        //cell0.innerHTML = '<input type="file" src="' + $("#output_AnhBia").attr("src") + '" id="post_AnhBia"  alt="Ảnh bìa" name="post_AnhBia" />';
+        y.appendTo(cell0);
+        cell1.innerHTML = String(document.getElementById("TenSach").value.trim());
+        cell2.innerHTML = String(document.getElementById("GiaBan").value.trim());
+        cell3.innerHTML = String(document.getElementById("MoTa").value.trim());
+        cell4.innerHTML = String(document.getElementById("SoLuong").value.trim());
+        cell5.innerHTML = String(document.getElementById("listTacGia").value.trim());
+        cell6.innerHTML = String(document.getElementById("listTheLoai").value.trim());
+        cell7.innerHTML = String(document.getElementById("NXB").value.trim());
+        cell8.innerHTML = '<button type="button" class="btnDelete"  onclick="RemoveSach(this)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
+
+        //debugger;
+        document.documentElement.scrollTop = row.getBoundingClientRect().y;
+    }
+    function RemoveSach(btn) {
+        $(btn).closest("tr").remove();
+    }
+
+    function Xuat() {
+        var divPost = document.getElementById("postDiv");
+        var table = document.getElementById("tblSach");
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            //divPost.innerHTML += row.cells[0].innerHTML;
+            divPost.innerHTML += '<input type="hidden" value="' + String(row.cells[1].innerHTML) + '" name="TenSach" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(row.cells[2].innerHTML) + '" name="GiaBan" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(row.cells[3].innerHTML) + '" name="MoTa" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(row.cells[4].innerHTML) + '" name="SoLuong" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(row.cells[5].innerHTML) + '" name="listTacGia" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(row.cells[6].innerHTML) + '" name="listTheLoai" />';
+            divPost.innerHTML += '<input type="hidden" value="' + String(row.cells[7].innerHTML) + '" name="NXB" />';
+        }
+
+        $("#frmAddProduct").submit();
+    }
+
+    //function Xuat() {
+    //    var divPost = document.getElementById("postDiv");
+    //    $("#tblSach tbody tr").each(function () {
+    //        var row = $(this);
+    //        divPost.innerHTML += '<input type="text" value="' + String(row.find("td").eq(0).html()) + '" name="AnhBia" />';
+    //        divPost.innerHTML += '<input type="text" value="' + String(row.find("td").eq(1).html()) + '" name="TenSach" />';
+    //        divPost.innerHTML += '<input type="text" value="' + String(row.find("td").eq(2).html()) + '" name="GiaBan" />';
+    //        divPost.innerHTML += '<input type="text" value="' + String(row.find("td").eq(3).html()) + '" name="MoTa" />';
+    //        divPost.innerHTML += '<input type="text" value="' + String(row.find("td").eq(4).html()) + '" name="SoLuong" />';
+    //        divPost.innerHTML += '<input type="text" value="' + String(row.find("td").eq(5).html()) + '" name="listTacGia" />';
+    //        divPost.innerHTML += '<input type="text" value="' + String(row.find("td").eq(6).html()) + '" name="listTheLoai" />';
+    //        divPost.innerHTML += '<input type="text" value="' + String(row.find("td").eq(7).html()) + '" name="NXB" />';
+    //        //divPost.innerHTML += '<input type="hidden" value="' + String(row.find("td").eq(0).html()) + '" name="TenVC" />';
+    //        //divPost.innerHTML += '<input type="hidden" value="' + String(row.find("td").eq(3).html()) + '" name="SoLuong" />';
+    //    });
+
+    //    //$("#frmAddProduct").submit();
+    //}
+
+    //function addVaccine() {
+    //    var divPost = document.getElementById("postDiv");
+
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("TenVaccine").value) + '" name="TenVaccine" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("NSX").value) + '" name="NSX" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("HSD").value) + '" name="HSD" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("SoLuong").value) + '" name="SoLuong" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("DVT").value) + '" name="DVT" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("LieuLuong").value) + '" name="LieuLuong" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("DonGia").value) + '" name="DonGia" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("LoaiBenh").value) + '" name="LoaiBenh" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("LoaiVaccine").value) + '" name="LoaiVaccine" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("TenSach").value) + '" name="TenSach" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("DonGiaLoVaccine").value) + '" name="DonGiaLoVaccine" />';
+    //    divPost.innerHTML += '<input type="hidden" value="' + String(document.getElementById("TenNCC").value) + '" name="TenNCC" />';
+
+    //    var table = document.getElementById("tblVaccine");
+    //    var row = table.insertRow(table.rows.length);
+    //    var cell0 = row.insertCell(0);
+    //    var cell1 = row.insertCell(1);
+    //    var cell2 = row.insertCell(2);
+    //    var cell3 = row.insertCell(3);
+    //    var cell4 = row.insertCell(4);
+    //    var cell5 = row.insertCell(5);
+    //    var cell6 = row.insertCell(6);
+    //    var cell7 = row.insertCell(7);
+    //    var cell8 = row.insertCell(8);
+    //    var cell9 = row.insertCell(9);
+    //    var cell10 = row.insertCell(10);
+    //    var cell11 = row.insertCell(11);
+
+    //    cell0.innerHTML = String(document.getElementById("TenVaccine").value);
+    //    cell1.innerHTML = String(document.getElementById("NSX").value);
+    //    cell2.innerHTML = String(document.getElementById("HSD").value);
+    //    cell3.innerHTML = String(document.getElementById("SoLuong").value);
+    //    cell4.innerHTML = String(document.getElementById("DVT").value);
+    //    cell5.innerHTML = String(document.getElementById("LieuLuong").value);
+    //    cell6.innerHTML = String(document.getElementById("DonGia").value);
+    //    cell7.innerHTML = String(document.getElementById("LoaiBenh").value);
+    //    cell8.innerHTML = String(document.getElementById("LoaiVaccine").value);
+    //    cell9.innerHTML = String(document.getElementById("TenSach").value);
+    //    cell10.innerHTML = String(document.getElementById("DonGiaLoVaccine").value);
+    //    cell11.innerHTML = String(document.getElementById("TenNCC").value);
+
+    //    $("#TenNCC option:not(:selected)").prop("disabled", true);
+    //    document.getElementById("TenSach").readOnly = true;
+    //    document.getElementById("DonGiaLoVaccine").readOnly = true;
+    //}
+
+    //function addVaccine() {
+    //    var e = document.getElementById("VC");
+    //    $.ajax({
+    //        url: '/Vaccine/GetVaccine',
+    //        data: '{ma: "' + $("#VC").val() + '" }',
+    //        type: 'POST',
+    //        contentType: 'application/json; charset=utf-8',
+    //        dataType: "json",
+    //        success: function (response) {
+    //            if (response != null) {
+    //                if ($("#sl").val() > response.SoLuong) {
+    //                    alert("Số lượng xuất không được lớn hơn số lượng tồn");
+    //                }
+    //                else {
+    //                    var table = document.getElementById("tblVaccine");
+    //                    var tbody = document.getElementById('tblVaccine').getElementsByTagName('tbody')[0];
+    //                    var row = tbody.insertRow(tbody.rows.length);
+    //                    var cell0 = row.insertCell(0);
+    //                    var cell1 = row.insertCell(1);
+    //                    var cell2 = row.insertCell(2);
+    //                    var cell3 = row.insertCell(3);
+    //                    var cell4 = row.insertCell(4);
+    //                    cell0.innerHTML = String(e.options[e.selectedIndex].value);
+    //                    cell1.innerHTML = String(e.options[e.selectedIndex].text);
+    //                    cell2.innerHTML = String(response.DonViTinh);
+    //                    cell3.innerHTML = String(document.getElementById("sl").value);
+    //                    cell4.innerHTML = '<button type="button" class="btnDelete">x</button>';
+    //                }
+    //            } else {
+    //                alert("Session object not found.");
+    //            }
+    //        },
+    //        failure: function (response) {
+    //            alert(response.responseText);
+    //        },
+    //        error: function (response) {
+    //            alert(response.responseText);
+    //        }
+    //    });
+    //    //$("#TenCS option:not(:selected)").prop("disabled", true);
+    //    document.getElementById("PhiCapVC").readOnly = true;
+    //    document.getElementById("TenCS").readOnly = true;
+    //}
+    //$(document).ready(function () {
+    //    $("#tblVaccine").on('click', '.btnDelete', function () {
+    //        $(this).closest('tr').remove();
+    //    });
+    //});
+
+    //function Xuat() {
+    //    var divPost = document.getElementById("postDiv");
+    //    $("#tblVaccine tbody tr").each(function () {
+    //        var row = $(this);
+    //        divPost.innerHTML += '<input type="hidden" value="' + String(row.find("td").eq(0).html()) + '" name="TenVC" />';
+    //        divPost.innerHTML += '<input type="hidden" value="' + String(row.find("td").eq(3).html()) + '" name="SoLuong" />';
+    //    });
+
+    //    $("#frmAddProduct").submit();
+    //}
+</script>
+

@@ -1,0 +1,231 @@
+﻿@model PagedList.IPagedList<CNW_2.Models.DTO.Sach_AdminIndex> 
+@using CNW_2.Models.DTO
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@{
+    Sach_AdminIndex Sach_Detail = ViewBag.Sach_Info;
+}
+
+<head>
+    <link href="~/Content/css/AdminAdd.css" rel="stylesheet" />
+</head>
+
+<section class="cart_items" style="margin: auto auto 300px 200px;">
+    <div class="frmBack">
+        @if (Session["Controller"].ToString() == "Admin")
+        {
+            int AdminPage = Convert.ToInt32(Session["Admin_Index_page"]);
+            if (AdminPage == 0) { AdminPage = 1; }
+
+            if (Session["Action"].ToString() == "Index")
+            {
+                <a href="@Url.Action("Index", "Admin", new { page = AdminPage })" class="">
+                    <i class="fa fa-arrow-left fa-lg btnBack" aria-hidden="true"></i>
+                    @*@Html.ActionLink("Quay về", "index", "Admin", new { page = Convert.ToInt32(Session["Admin_Index_page"]) }, new { @class = "btnBack" })*@
+                </a>
+            }
+            if (Session["Action"].ToString() == "Search")
+            {
+                <a href="@Url.Action("Search", "Admin", new { page = AdminPage })" class="">
+                    <i class="fa fa-arrow-left fa-lg btnBack" aria-hidden="true"></i>
+                </a>
+            }
+        }
+    </div>
+
+    <div class="ResetForm">
+        <a onclick="ResetForm()">Reset</a>
+    </div>
+
+    <form id="frmAddProduct" class='formValidation' action="/Admin/Edit" method="post" enctype="multipart/form-data" name="frmAddProduct">
+        <div class="frmDienThongTin">
+            <input type="hidden" name="MaSach" value="@Sach_Detail.MaSach" />
+
+            <p class="Add_heading">Tên sách</p>
+            <input type="text" placeholder="" autocomplete="off" id="TenSach" name="TenSach" value="@Sach_Detail.TenSach" />
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="Add_headingrow_GiaBan">Giá bán</p>
+                    <input type="text" placeholder="" autocomplete="off" id="GiaBan" name="GiaBan" value="@Sach_Detail.GiaBan" />
+                </div>
+                <div class="col-sm-3">
+                    <p class="Add_headingrow">Số lượng</p>
+                    <input type="text" placeholder="" autocomplete="off" id="SoLuong" name="SoLuong" value="@Sach_Detail.SoLuongTon" />
+                </div>
+                <div class="col-sm-6">
+                    <p class="Add_headingrow">Nhà xuất bản</p>
+                    <input type="text" list="datalistNXB" placeholder="" autocomplete="off" id="NXB" name="NXB" value="@Sach_Detail.NXB" />
+                    <datalist id="datalistNXB">
+                        @{ string Selected = "";}
+                        @foreach (var item in ViewBag.listNXB as ICollection<NhaXuatBan>)
+                        {
+                            if (item.TenNXB == Sach_Detail.NXB)
+                            {
+                                Selected = "selected";
+                            }
+                            <option value="@item.TenNXB" @Selected></option>
+                            Selected = "";
+                        }
+                    </datalist>
+                </div>
+            </div>
+            <div class="listTG_TheLoai">
+                <p class="Add_heading">Tác giả</p>
+                <input type="text" list="datalistTacGia" placeholder="" autocomplete="off" id="TacGia" />
+                <datalist id="datalistTacGia">
+                    @foreach (var item in ViewBag.listTacGia as ICollection<TacGia>)
+                    {
+                        <option value="@item.TenTG"></option>
+                    }
+                </datalist>
+                <a onclick="addListTacGia()" class="btnThem_TacGia_TheLoai">+</a>
+                <input type="text" placeholder="" autocomplete="off" id="listTacGia" name="listTacGia" value="@Sach_Detail.TacGia" />
+
+                <br />
+
+                <p class="Add_heading">Thể loại</p>
+                <input type="text" list="datalistTheLoai" placeholder="" autocomplete="off" id="TheLoai" />
+                <datalist id="datalistTheLoai">
+                    @foreach (var item in ViewBag.listTheLoai as ICollection<TheLoai>)
+                    {
+                        <option value="@item.TenTheLoai"></option>
+                    }
+                </datalist>
+                <a onclick="addListTheLoai()" class="btnThem_TacGia_TheLoai">+</a>
+                <input type="text" placeholder="" autocomplete="off" id="listTheLoai" name="listTheLoai" value="@Sach_Detail.TheLoai" />
+            </div>
+            <br />
+            <p class="Add_heading">Mô tả</p>
+            <textarea placeholder="" autocomplete="off" id="MoTa" name="MoTa"></textarea>
+            <input type="hidden" id="MoTa_val" value="@Sach_Detail.MoTa" />
+            <br />
+
+            <div class="UploadPicture">
+                <p class="Add_heading_AnhBia">Chọn ảnh bìa</p>
+                <input type="file" id="AnhBia" name="AnhBia" onchange="loadFile(event)">
+                <label for="AnhBia"><i class="fa fa-upload" aria-hidden="true"></i></label>
+                <label class="XoaAnhBia" onclick="XoaAnhBia()"><i class="fa fa-times fa-lg" aria-hidden="true"></i></label>
+                <img id="output_AnhBia" src="~/Content/images/Sach_image/@Sach_Detail.AnhBia" />
+                <input type="hidden" id="image_action" name="image_action" value="KeepImage" />
+            </div>
+        </div>
+
+        <div>
+            <a onclick="Xuat()" class="btnSubmit">Lưu chỉnh sửa</a>
+        </div>
+
+        <div id="postDiv">
+
+        </div>
+    </form>
+
+    <div class="hiddenInput">
+        @{
+            string heightScroll = "0";
+            if (Session["AdminIndex_ScrollTop"] != null)
+            {
+                heightScroll = Session["AdminIndex_ScrollTop"].ToString();
+            }
+        }
+        <input type="hidden" id="pageTop" value="@heightScroll" />
+    </div>
+</section>
+
+<script>
+    (function () {
+        document.getElementById("MoTa").value = document.getElementById("MoTa_val").value;
+    })()
+    //$(document).ready(function () {
+    //    document.getElementById("MoTa").value = document.getElementById("MoTa_val").value;
+    //    debugger;
+    //})
+
+    @*class ProductJS {
+        constructor() {
+            this.loadData();
+        }
+
+        loadData() {
+            document.getElementById("MoTa").value = @Sach_Detail.MoTa;
+            debugger;
+        }
+    }*@
+</script>
+
+<script>
+    function ResetForm() {
+        document.getElementById("TenSach").value = '';
+        document.getElementById("GiaBan").value = '';
+        document.getElementById("MoTa").value = '';
+        document.getElementById("SoLuong").value = '';
+        document.getElementById("TacGia").value = '';
+        document.getElementById("TheLoai").value = '';
+        document.getElementById("listTacGia").value = '';
+        document.getElementById("listTheLoai").value = '';
+        document.getElementById("NXB").value = '';
+
+        document.getElementById("output_AnhBia").removeAttribute("src");
+        $("#AnhBia").val('');
+        //debugger;
+    }
+
+    var loadFile = function (event) {
+        var output = document.getElementById('output_AnhBia');
+        output.src = URL.createObjectURL(event.target.files[0]);
+    };
+
+    function XoaAnhBia() {
+        document.getElementById("output_AnhBia").removeAttribute("src");
+        $("#AnhBia").val('');
+        $("#image_action").val('DeleteImage');
+    }
+</script>
+<script>
+    function addListTacGia() {
+        //debugger;
+        var txbListTacGia = document.getElementById("listTacGia");
+        var TacGia = document.getElementById("TacGia");
+
+        TacGia.value = TacGia.value.trim();
+
+        if (TacGia.value != '') {
+            if (txbListTacGia.value == '') {
+                txbListTacGia.value = TacGia.value;
+            }
+            else {
+                txbListTacGia.value = txbListTacGia.value + ', ' + TacGia.value;
+            }
+        }
+        TacGia.value = '';
+        TacGia.focus();
+    }
+
+    function addListTheLoai() {
+        var txbListTheLoai = document.getElementById("listTheLoai");
+        var TheLoai = document.getElementById("TheLoai");
+
+        TheLoai.value = TheLoai.value.trim();
+
+        if (TheLoai.value != '') {
+            if (txbListTheLoai.value == '') {
+                txbListTheLoai.value = TheLoai.value;
+            }
+            else {
+                txbListTheLoai.value = txbListTheLoai.value + ', ' + TheLoai.value;
+            }
+        }
+        TheLoai.value = '';
+        TheLoai.focus();
+    }
+    
+    function Xuat() {
+        //debugger;
+
+        $("#frmAddProduct").submit();
+    }
+</script>
+

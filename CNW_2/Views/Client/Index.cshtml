@@ -1,0 +1,574 @@
+﻿@model PagedList.IPagedList<CNW_2.Models.DTO.Sach_AdminIndex>
+@using CNW_2.Models.DTO
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@{
+    TaiKhoan_Info tk = null;
+    if (Session["ThongTinDangNhap"] != null)
+    {
+        tk = Session["ThongTinDangNhap"] as TaiKhoan_Info;
+    }
+}
+
+<head>
+    <link href="~/Content/css/ClientIndexCSS.css" rel="stylesheet" />
+</head>
+
+<section style="padding-bottom: 200px; ">
+    <div class="container">
+        <form id="frmTimKiem" class='' action="/Client/Search" method="post" enctype="multipart/form-data" name="">
+            <div class="row">
+                <div class="txbTimKiem">
+                    @{
+                        string TimTenSach = "";
+                        if (Session["Client_TimTenSach"] != null) { TimTenSach = Session["Client_TimTenSach"].ToString(); }
+                    }
+                    <input type="text" name="postTenSach" placeholder="Nhập tên sách" value="@TimTenSach" />
+                    <a class="" onclick="Xuat()">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="col-sm-3">
+                    <div class="DanhMucTimKiem">
+                        @*left-sidebar*@
+                        <div class="frmKhoangGia">
+                            @{
+                                string Min = "";
+                                string Max = "";
+                                if (Session["Client_TimGiaTienMin"] != null) { Min = Session["Client_TimGiaTienMin"].ToString(); }
+                                if (Session["Client_TimGiaTienMax"] != null) { Max = Session["Client_TimGiaTienMax"].ToString(); }
+                            }
+                            <h2>Khoảng giá</h2>
+                            <input type="text" placeholder="Từ ..." name="postMin" value="@Min" /> - <input type="text" placeholder="Đến ..." name="postMax" value="@Max" />
+                            <a id="submitKhoangGia" onclick="Xuat()">Áp dụng</a>
+                        </div>
+
+                        <div class="frmRadio" id="frmTheLoai">
+                            @{
+                                string TheLoai_active = "";
+                                string TheLoai_checked = "";
+                                if (Session["Client_TimTheLoai"] == null || Session["Client_TimTheLoai"].ToString() == "")
+                                {
+                                    TheLoai_active = "RadioActive";
+                                    TheLoai_checked = "checked";
+                                }
+                            }
+                            <h2>Danh mục thể loại</h2>
+                            <div class="">
+                                <ul id="ul_TheLoai" class="nav nav-pills nav-stacked">
+                                    <li>
+                                        <input type="radio" id="TheLoai_TatCa" name="TheLoai" value="Tất cả" onclick="RadioActive(this)" @TheLoai_checked>
+                                        <label for="TheLoai_TatCa" class="@TheLoai_active">Tất cả</label>
+                                    </li>
+                                    @foreach (var item in ViewBag.listTheLoai as ICollection<TheLoai>)
+                                    {
+                                        TheLoai_active = "";
+                                        TheLoai_checked = "";
+                                        if (Session["Client_TimTheLoai"] != null && Session["Client_TimTheLoai"].ToString() == item.TenTheLoai)
+                                        {
+                                            TheLoai_active = "RadioActive";
+                                            TheLoai_checked = "checked";
+                                        }
+                                        <li>
+                                            @{ string idTheLoai = "TheLoai_" + item.TenTheLoai;}
+                                            <input type="radio" id="@idTheLoai" name="TheLoai" value="@item.TenTheLoai" onclick="RadioActive(this)" @TheLoai_checked>
+                                            <label for="@idTheLoai" class="@TheLoai_active">@item.TenTheLoai</label>
+                                        </li>
+                                    }
+                                    @*<li><a href="#">Fendi</a></li>*@
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="frmRadio" id="frmTacGia">
+                            @{
+                                string TacGia_active = "";
+                                string TacGia_checked = "";
+                                if (Session["Client_TimTacGia"] == null || Session["Client_TimTacGia"].ToString() == "")
+                                {
+                                    TacGia_active = "RadioActive";
+                                    TacGia_checked = "checked";
+                                }
+                            }
+                            <h2>Tác giả</h2>
+                            <div class="">
+                                <ul id="ul_TacGia" class="nav nav-pills nav-stacked">
+                                    <li>
+                                        <input type="radio" id="TacGia_TatCa" name="TacGia" value="Tất cả" onclick="RadioActive(this)" @TacGia_checked>
+                                        <label for="TacGia_TatCa" class="@TacGia_active">Tất cả</label>
+                                    </li>
+                                    @foreach (var item in ViewBag.listTacGia as ICollection<TacGia>)
+                                    {
+                                        TacGia_active = "";
+                                        TacGia_checked = "";
+                                        if (Session["Client_TimTacGia"] != null && Session["Client_TimTacGia"].ToString() == item.TenTG)
+                                        {
+                                            TacGia_active = "RadioActive";
+                                            TacGia_checked = "checked";
+                                        }
+                                        <li>
+                                            @{ string idTacGia = "TacGia_" + item.TenTG;}
+                                            <input type="radio" id="@idTacGia" name="TacGia" value="@item.TenTG" onclick="RadioActive(this)" @TacGia_checked>
+                                            <label for="@idTacGia" class="@TacGia_active">@item.TenTG</label>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="frmRadio" id="frmNXB">
+                            @{
+                                string NXB_active = "";
+                                string NXB_checked = "";
+                                if (Session["Client_TimNXB"] == null || Session["Client_TimNXB"].ToString() == "")
+                                {
+                                    NXB_active = "RadioActive";
+                                    NXB_checked = "checked";
+                                }
+                            }
+                            <h2>Nhà xuất bản</h2>
+                            <div class="">
+                                <ul id="ul_NXB" class="nav nav-pills nav-stacked">
+                                    <li id="li_NXB_TatCa">
+                                        <input type="radio" id="NXB_TatCa" name="NXB" value="Tất cả" onclick="RadioActive(this)" @NXB_checked>
+                                        <label for="NXB_TatCa" class="@NXB_active">Tất cả</label>
+                                    </li>
+                                    @foreach (var item in ViewBag.listNXB as ICollection<NhaXuatBan>)
+                                    {
+                                        NXB_active = "";
+                                        NXB_checked = "";
+                                        if (Session["Client_TimNXB"] != null && Session["Client_TimNXB"].ToString() == item.TenNXB)
+                                        {
+                                            NXB_active = "RadioActive";
+                                            NXB_checked = "checked";
+                                        }
+                                        <li id="">
+                                            @{ string idNXB = "NXB_" + item.TenNXB;}
+                                            <input type="radio" id="@idNXB" name="NXB" value="@item.TenNXB" onclick="RadioActive(this)" @NXB_checked>
+                                            <label for="@idNXB" class="@NXB_active">@item.TenNXB</label>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post_div">
+                    <input type="hidden" id="postTheLoai" name="postTheLoai" />
+                    <input type="hidden" id="postTacGia" name="postTacGia" />
+                    <input type="hidden" id="postNXB" name="postNXB" />
+                </div>
+
+
+                <div class="col-sm-9 padding-right">
+                    <div class="features_items">
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-sm-3">
+                                <div class="product-image-wrapper">
+                                    <div class="single-products">
+                                        <div class="productinfo text-center">
+                                            <div class="productionContent" onclick="XemChiTiet(@item.MaSach)">
+                                                <img src="~/Content/images/Sach_image/@item.AnhBia" alt="Ảnh bìa" />
+                                                <h2>@item.GiaBan</h2>
+                                                @{
+                                                    string TenSach = item.TenSach;
+                                                    if (TenSach.Length > 50)
+                                                    {
+                                                        <p>
+                                                            @TenSach.Substring(0, 50) ......
+                                                            <input type="hidden" class="GetMoTa" value="@TenSach" />
+                                                        </p>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="">@TenSach</p>
+                                                    }
+                                                }
+                                            </div>
+
+                                            @{
+                                                string cart_TenSach = item.TenSach;
+                                                if (cart_TenSach.Length > 80)
+                                                {
+                                                    cart_TenSach = cart_TenSach.Substring(0, 80) + " ...";
+
+                                                }
+                                            }
+
+                                            @{ 
+                                                string chucVu = "";
+                                                if(tk != null) { chucVu = tk.ChucVu; }
+                                            }
+                                            <input type="hidden" id="info_ChucVu" value="@chucVu" />
+
+                                            <input type="hidden" id="info_MaSach" value="@item.MaSach" />
+                                            <input type="hidden" id="info_TenSach" value="@cart_TenSach" />
+                                            <input type="hidden" id="info_SoLuongTon" value="@item.SoLuongTon" />
+                                            <input type="hidden" id="info_AnhBia" value="@item.AnhBia" />
+
+                                            @{
+                                                string enableBtn = "";
+                                                if (item.SoLuongTon == 0) { enableBtn = "disabled"; }
+                                            }
+                                            <a onclick="HienGioHang(this)" id="btnCart" class="btn btn-default add-to-cart"  @enableBtn ><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
+                                        </div>
+                                        @{
+                                            if (enableBtn == "disabled")
+                                            {
+                                                <img src="~/Content/images/home/out.png" class="new" alt="" />
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5"></div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="pagination" id="dataTable_paginate" style="text-align:right">
+                                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                                @if (Session["Controller"].ToString() == "Client")
+                                {
+                                    if (Session["Action"].ToString() == "Index")
+                                    {
+                                        @Html.PagedListPager(Model, pageNum => Url.Action("Index", "Client", new { page = pageNum }))
+                                    }
+                                    if (Session["Action"].ToString() == "Search")
+                                    {
+                                        @Html.PagedListPager(Model, pageNum => Url.Action("Search", "Client", new { page = pageNum }))
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="blank_background">
+
+    </div>
+
+    <div class="frmThemVaoGio">
+        <form id="frmGioHang" class='' action="/Client/Cart" method="post" enctype="multipart/form-data" name="">
+            <input type="hidden" id="cart_MaSach" />
+            <div class="TieuDeGioHang">
+                <div class="TieuDe">
+                    Thêm vào giỏ hàng
+                </div>
+                <div class="btnThoatGioHang" id="btnOutCart" onclick="ThoatGioHang()">
+                    x
+                </div>
+            </div>
+            <div class="row ChiTiet">
+                <div class="col-sm-3">
+                    <img id="cart_AnhBia" src="~/Content/images/Sach_image/gahama.png" alt="Ảnh bìa" />
+                </div>
+                <div class="col-sm-9">
+                    <div id="cart_TenSach" class="TenSP">Tên Tên Tên Tên Tên  Tên Tên Tên Tên Tên Tên </div>
+                    <p id="cart_GiaTien"></p>
+                    <p id="cart_SoLuongTon"></p>
+                </div>
+            </div>
+            <hr />
+            <div class="row LuaChonSoLuong">
+                <div class="col-sm-3">
+                    Số lượng
+                </div>
+                <div class="col-sm-9">
+                    <div class="SoLuong">
+                        <input id="cart_minus" type="button" value="-" onclick="TangGiamSoLuong_Cart(this)">
+                        <input type="number" value="1" max="" min="0" id="cart_number" onkeydown="return SoLuong_Cart_keyDown(event)" onkeyup="SoLuong_Cart_keyUp()" @*onchange="SoLuong_cart()"*@>
+                        <input id="cart_plus" type="button" value="+" onclick="TangGiamSoLuong_Cart(this)">
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row TongTienSP">
+                <div class="col-sm-3">
+                    Tổng tiền
+                </div>
+                <div class="col-sm-9">
+                    <div class="TongTien">
+                        <p id="cart_TongTien"></p>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="btnThemVaoGioHang">
+                <a id="AddToCart" onclick="SubmitGioHang()">Thêm vào Giỏ hàng</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="hiddenInput">
+        @{
+            string heightScroll = "0";
+            if (Session["ClientIndex_ScrollTop"] != null)
+            {
+                heightScroll = Session["ClientIndex_ScrollTop"].ToString();
+            }
+        }
+        <input type="hidden" id="pageTop" value="@heightScroll" />
+    </div>
+</section>
+
+<script>
+    (function () {
+        document.documentElement.scrollTop = document.getElementById("pageTop").value;
+        //debugger;
+    })()
+
+    function SetSession(setName, setValue) {
+        var obj = JSON.stringify({
+            name: setName,
+            value: setValue
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/Client/SetSession",
+            data: obj,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+        });
+    }
+
+    function XemChiTiet(MaSach) {
+        SetSession("ClientIndex_ScrollTop", String(pageYOffset));
+
+        window.location.pathname = "/Client/Detail/" + MaSach;
+    }
+
+    //--------------------------------JS TÌM KIẾM---------------------------------------
+    function BeforeSubmit() {
+        var ul_TheLoai = document.getElementById("ul_TheLoai");
+        var item_TheLoai = ul_TheLoai.getElementsByTagName("li");
+        for (var i = 0; i < item_TheLoai.length; ++i) {
+            if ($(item_TheLoai[i]).find("input").is(':checked') == true) {
+                document.getElementById("postTheLoai").value = $(item_TheLoai[i]).find("label").text();
+            }
+        }
+
+        var ul_TacGia = document.getElementById("ul_TacGia");
+        var item_TacGia = ul_TacGia.getElementsByTagName("li");
+        for (var i = 0; i < item_TacGia.length; ++i) {
+            if ($(item_TacGia[i]).find("input").is(':checked') == true) {
+                document.getElementById("postTacGia").value = $(item_TacGia[i]).find("label").text();
+            }
+        }
+
+        var ul_NXB = document.getElementById("ul_NXB");
+        var item_NXB = ul_NXB.getElementsByTagName("li");
+        for (var i = 0; i < item_NXB.length; ++i) {
+            if ($(item_NXB[i]).find("input").is(':checked') == true) {
+                document.getElementById("postNXB").value = $(item_NXB[i]).find("label").text();
+            }
+        }
+
+        SetSession("ClientIndex_ScrollTop", String(pageYOffset));
+    }
+
+    function RadioActive(rd) {
+        //if ($(rd).is(':checked') == true) {
+        //    $(rd).parent().find("label").addClass("RadioActive");
+        //    //alert($(rd).closest("li").find("label").text());
+        //}
+        //else {
+        //    $(rd).parent().find("label").removeClass("RadioActive");
+        //}
+
+        var ul_id = $(rd).parent().parent().attr("id");
+
+        var ul = document.getElementById(ul_id);
+        var items = ul.getElementsByTagName("li");
+        for (var i = 0; i < items.length; ++i) {
+            //alert($(items[i]).find("label").text());
+            // do something with items[i], which is a <li> element
+            if ($(items[i]).find("input").is(':checked') == true) {
+                $(items[i]).find("label").addClass("RadioActive");
+            }
+            else {
+                $(items[i]).find("label").removeClass("RadioActive");
+            }
+        }
+
+        BeforeSubmit();
+        $("#frmTimKiem").submit();
+    }
+
+    function Xuat() {
+        BeforeSubmit();
+        $("#frmTimKiem").submit();
+    }
+
+    //---------------------------------JS GIỎ HÀNG------------------------------------------
+    //$(document).ready(function () {
+    //    debugger;
+    //    var cartJS = new CartJS();
+    //})
+
+    //class CartJS {
+    //    constructor() {
+    //        this.addToCartEvents();
+    //    }
+
+    //    addToCartEvents() {
+    //        $('#btnCart').click(this.btnAddToCartOnClick);
+    //    }
+
+    //    btnAddToCartOnClick() {
+    //        $('.blank_background').show();
+    //        $('.frmThemVaoGio').show();
+    //    }
+    //}
+
+    function HienGioHang(Sach) {
+        if ($("#info_ChucVu").val() == "") {
+            var result = confirm("Đăng nhập để mua hàng. Chuyển đến trang đăng nhập?");
+            if (result) {
+                window.location.pathname = "/Login/Index/";
+            }
+        }
+        else if ($("#info_ChucVu").val() == "Admin" || $("#info_ChucVu").val() == "NhanVien") {
+            alert("Đăng nhập bằng tài khoản khách hàng để mua hàng");
+        }
+        else {
+            $('.blank_background').show();
+            $('.frmThemVaoGio').show();
+            //debugger;
+            //alert($(Sach).parent().find("h2").text());
+            //alert($(Sach).parent().find("#info_TenSach").val());
+            //alert($(Sach).parent().find("#info_SoLuongTon").val());
+            //alert($(Sach).parent().find("#info_AnhBia").val());
+            //debugger;
+            document.getElementById("cart_MaSach").value = $(Sach).parent().find("#info_MaSach").val();
+            document.getElementById("cart_TenSach").innerHTML = $(Sach).parent().find("#info_TenSach").val();
+            document.getElementById("cart_GiaTien").innerHTML = 'Giá tiền: ' + $(Sach).parent().find("h2").text();
+            document.getElementById("cart_SoLuongTon").innerHTML = 'Số lượng còn lại: ' + $(Sach).parent().find("#info_SoLuongTon").val();
+            $("#cart_AnhBia").attr("src", "/Content/images/Sach_image/" + $(Sach).parent().find("#info_AnhBia").val());
+            $("#cart_number").attr("max", $(Sach).parent().find("#info_SoLuongTon").val());
+            $("#cart_number").val(1);
+            document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ';
+        }
+    }
+
+    function ThoatGioHang() {
+        $('.blank_background').hide();
+        $('.frmThemVaoGio').hide();
+    }
+
+    function TangGiamSoLuong_Cart(qu) {
+        //debugger;
+        if (qu.value == '+') {
+            $("#cart_number").val(Number($("#cart_number").val()) + 1);
+            if (Number($("#cart_number").val()) > Number($("#cart_number").attr("max"))) {
+                $("#cart_number").val(Number($("#cart_number").attr("max")));
+            }
+            document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ'
+        }
+        else if (qu.value == '-') {
+            $("#cart_number").val(Number($("#cart_number").val()) - 1);
+            if (Number($("#cart_number").val()) <= 0) {
+                $("#cart_number").val(1);
+            }
+            document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ'
+        }
+    }
+
+    //---------------------------------ONCHANGED() INPUT NUMBER-----------------------------
+    function SoLuong_Cart_keyDown(event) {
+        var key;
+        if (window.event) {
+            key = window.event.key;
+            //debugger;
+        }
+        if (key == "." || key == "-" || key == "+") {
+            return false;
+        }
+    }
+
+    function SoLuong_Cart_keyUp() {
+        if ($("#cart_number").val() != '') {
+            if ($("#cart_number").val() == '0') {
+                $("#cart_number").val(1);
+            }
+
+            var GiaTien = Number($("#cart_GiaTien").text().substring(10));
+            var SoLuong = Number($("#cart_number").val());
+
+            var maxValue = Number($("#cart_number").attr("max"));
+
+            if (SoLuong > maxValue) {
+                $("#cart_number").val($("#cart_number").attr("max"));
+            }
+            $("#cart_TongTien").text(GiaTien * SoLuong + ' VNĐ');
+
+        }
+    }
+
+    //function SoLuong_cart() {
+    //    //debugger;
+    //    document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ'
+    //    //debugger;
+    //    if (Number($("#cart_number").val()) <= 0) {
+    //        $("#cart_number").val(1);
+    //        document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ';
+    //    }
+    //    if (Number($("#cart_number").val()) > Number($("#cart_number").attr("max"))) {
+    //        $("#cart_number").val($("#cart_number").attr("max"));
+    //        document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ';
+    //    }
+    //}
+
+    function SubmitGioHang() {
+        if ($("#cart_number").val() == '') {
+            alert("Vui lòng nhập vào một giá trị số lượng !!!");
+            $("#cart_number").val(1);
+            document.getElementById("cart_TongTien").innerHTML = Number($("#cart_number").val()) * Number($("#cart_GiaTien").text().substring(10)) + ' VNĐ';
+        }
+        else {
+            var obj = JSON.stringify({
+                MaSach: Number($("#cart_MaSach").val()),
+                SoLuong: Number($("#cart_number").val())
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Cart/ThemGioHang",
+                data: obj,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            }).done(function (response) {
+                if (response == "newItem") {
+                    var numberCartItems = document.getElementById("number_cartItems");
+                    numberCartItems.innerHTML = Number(numberCartItems.innerHTML) + 1;
+                    alert("Đã thêm vào giỏ hàng");
+                }
+                else if (response == "availableItem") {
+                    alert("Đã thêm vào giỏ hàng");
+                }
+                else {
+                    alert("Có lỗi khi thêm vào giỏ hàng");
+                }
+            }).fail(function (response) {
+
+            });
+
+            ThoatGioHang();
+        }
+    }
+</script>
+
+
